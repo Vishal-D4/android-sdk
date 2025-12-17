@@ -1,0 +1,36 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:2:1-15:12
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:2:1-15:12
+	package
+		INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:2:11-69
+uses-permission#android.permission.INTERNET
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:4:5-67
+	android:name
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:4:22-64
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:5:5-79
+	android:name
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:5:22-76
+application
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:7:5-13:19
+activity#com.yourgpt.sdk.ChatbotActivity
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:8:9-12:50
+	android:hardwareAccelerated
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:12:13-47
+	android:exported
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:10:13-37
+	android:theme
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:11:13-69
+	android:name
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:9:13-44
+uses-sdk
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml

@@ -1,0 +1,6 @@
+com.yourgpt.sdk.example.test-annotation-experimental-1.3.0-0 /Users/d4-f2/.gradle/caches/transforms-3/0608b959158b7afdb19e181e0c3508f2/transformed/annotation-experimental-1.3.0/res
+com.yourgpt.sdk.example.test-core-1.5.0-1 /Users/d4-f2/.gradle/caches/transforms-3/11e01b81eb0cefd14efb76a4c3b257c8/transformed/core-1.5.0/res
+com.yourgpt.sdk.example.test-androidTest-2 /Users/d4-f2/Desktop/YGPT/android-sdk/example/build/generated/res/resValues/androidTest/debug
+com.yourgpt.sdk.example.test-mergeDebugAndroidTestResources-3 /Users/d4-f2/Desktop/YGPT/android-sdk/example/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+com.yourgpt.sdk.example.test-mergeDebugAndroidTestResources-4 /Users/d4-f2/Desktop/YGPT/android-sdk/example/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+com.yourgpt.sdk.example.test-merged_res-5 /Users/d4-f2/Desktop/YGPT/android-sdk/example/build/intermediates/merged_res/debugAndroidTest

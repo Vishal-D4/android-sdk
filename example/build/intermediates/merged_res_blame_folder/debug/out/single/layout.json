@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-mergeDebugResources-48:/layout/activity_main.xml",
+        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-mergeDebugResources-48:/layout/activity_home_screen.xml",
+        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/activity_home_screen.xml"
+    },
+    {
+        "merged": "com.yourgpt.sdk.example-mergeDebugResources-48:/layout/fragment_support.xml",
+        "source": "com.yourgpt.sdk.example-main-51:/layout/fragment_support.xml"
+    },
+    {
+        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-mergeDebugResources-48:/layout/fragment_support.xml",
+        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/fragment_support.xml"
+    },
+    {
+        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-mergeDebugResources-48:/layout/fragment_exchange.xml",
+        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/fragment_exchange.xml"
+    },
+    {
+        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-mergeDebugResources-48:/layout/fragment_home.xml",
+        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-mergeDebugResources-48:/layout/fragment_orders.xml",
+        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/fragment_orders.xml"
+    }
+]

@@ -1,0 +1,28 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.yourgpt.sdk" >
+4
+5    <uses-sdk android:minSdkVersion="21" />
+6
+7    <uses-permission android:name="android.permission.INTERNET" />
+7-->/Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:4:5-67
+7-->/Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:4:22-64
+8    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+8-->/Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:5:5-79
+8-->/Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:5:22-76
+9
+10    <application>
+10-->/Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:7:5-13:19
+11        <activity
+11-->/Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:8:9-12:50
+12            android:name="com.yourgpt.sdk.ChatbotActivity"
+12-->/Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:9:13-44
+13            android:exported="false"
+13-->/Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:10:13-37
+14            android:hardwareAccelerated="true"
+14-->/Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:12:13-47
+15            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+15-->/Users/d4-f2/Desktop/YGPT/android-sdk/src/main/AndroidManifest.xml:11:13-69
+16    </application>
+17
+18</manifest>

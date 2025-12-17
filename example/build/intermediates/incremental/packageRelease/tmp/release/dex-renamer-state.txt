@@ -1,0 +1,4 @@
+#Wed Dec 10 13:29:10 IST 2025
+base.0=/Users/d4-f2/Desktop/YGPT/android-sdk/example/build/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex

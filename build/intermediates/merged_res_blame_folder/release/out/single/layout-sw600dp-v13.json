@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.yourgpt.sdk.yourgpt-sdk-merged_res-31:/layout-sw600dp-v13/design_layout_snackbar.xml",
+        "source": "com.yourgpt.sdk.yourgpt-sdk-material-1.10.0-6:/layout-sw600dp-v13/design_layout_snackbar.xml"
+    },
+    {
+        "merged": "com.yourgpt.sdk.yourgpt-sdk-merged_res-31:/layout-sw600dp-v13/mtrl_layout_snackbar.xml",
+        "source": "com.yourgpt.sdk.yourgpt-sdk-material-1.10.0-6:/layout-sw600dp-v13/mtrl_layout_snackbar.xml"
+    }
+]

@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.yourgpt.sdk.yourgpt-sdk-merged_res-31:/layout-watch-v20/abc_alert_dialog_title_material.xml",
+        "source": "com.yourgpt.sdk.yourgpt-sdk-appcompat-1.6.1-17:/layout-watch-v20/abc_alert_dialog_title_material.xml"
+    },
+    {
+        "merged": "com.yourgpt.sdk.yourgpt-sdk-merged_res-31:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml",
+        "source": "com.yourgpt.sdk.yourgpt-sdk-appcompat-1.6.1-17:/layout-watch-v20/abc_alert_dialog_button_bar_material.xml"
+    }
+]

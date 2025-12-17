@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.yourgpt.sdk.yourgpt-sdk-merged_res-31:/animator-v21/design_appbar_state_list_animator.xml",
+        "source": "com.yourgpt.sdk.yourgpt-sdk-material-1.10.0-6:/animator-v21/design_appbar_state_list_animator.xml"
+    },
+    {
+        "merged": "com.yourgpt.sdk.yourgpt-sdk-merged_res-31:/animator-v21/m3_appbar_state_list_animator.xml",
+        "source": "com.yourgpt.sdk.yourgpt-sdk-material-1.10.0-6:/animator-v21/m3_appbar_state_list_animator.xml"
+    }
+]
