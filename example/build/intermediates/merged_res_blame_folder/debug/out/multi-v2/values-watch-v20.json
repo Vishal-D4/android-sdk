@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.yourgpt.sdk.example-mergeDebugResources-47:/values-watch-v20/values-watch-v20.xml",
+            "outputFile": "com.yourgpt.sdk.example-mergeDebugResources-62:/values-watch-v20/values-watch-v20.xml",
             "map": [
                 {
-                    "source": "/Users/d4-f2/.gradle/caches/transforms-3/97e2e7b31217bf820518c04e4405c87f/transformed/appcompat-1.6.1/res/values-watch-v20/values-watch-v20.xml",
+                    "source": "/Users/d4-f2/.gradle/caches/transforms-3/b50c023fb3ff9665e8ad43862e7d9d05/transformed/appcompat-1.6.1/res/values-watch-v20/values-watch-v20.xml",
                     "from": {
                         "startLines": "2,5,8",
                         "startColumns": "4,4,4",

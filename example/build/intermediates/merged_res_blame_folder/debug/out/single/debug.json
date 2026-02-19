@@ -1,150 +1,146 @@
 [
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_quick_amount_button_bg.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/quick_amount_button_bg.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_action_button_bg_more.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/action_button_bg_more.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_orders.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_orders.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_support.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_support.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/layout_fragment_support.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/fragment_support.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_tab_background.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/tab_background.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_home.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_home.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/layout_activity_main.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/layout/activity_main.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/menu_bottom_navigation_menu.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/menu/bottom_navigation_menu.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_status_badge_pending.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/status_badge_pending.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_chat.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_chat.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_empty_orders.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_empty_orders.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/layout_fragment_home.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/fragment_home.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_swap.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_swap.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/color_bottom_nav_selector.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/color/bottom_nav_selector.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_exchange.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_exchange.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_status_badge_pending.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/status_badge_pending.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/layout_fragment_orders.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/layout/fragment_orders.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_action_button_bg_buy.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/action_button_bg_buy.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_launcher.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_launcher.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_action_button_bg_sell.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/action_button_bg_sell.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_arrow_up.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_arrow_up.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_ethereum.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_ethereum.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_status_badge_filled.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/status_badge_filled.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/layout_fragment_orders.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/fragment_orders.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/color_bottom_nav_selector.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/color/bottom_nav_selector.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_swap.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_swap.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_percentage_badge_bg.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/percentage_badge_bg.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/layout_activity_home_screen.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/activity_home_screen.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_buy.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_buy.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_exchange.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_exchange.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_more.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_more.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/layout_activity_main.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/activity_main.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_arrow_down.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_arrow_down.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_more.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_more.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_primary_button_bg.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/primary_button_bg.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_status_badge_filled.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/status_badge_filled.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_transfer.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_transfer.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_arrow_up.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_arrow_up.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_crypto_icon_bg.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/crypto_icon_bg.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_arrow_down.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_arrow_down.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_quick_amount_button_bg.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/quick_amount_button_bg.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_launcher.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_launcher.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/layout_activity_home_screen.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/layout/activity_home_screen.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_action_button_bg_more.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/action_button_bg_more.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_home.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_home.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_action_button_bg_transfer.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/action_button_bg_transfer.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_sell.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_sell.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_buy.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_buy.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_bitcoin.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_bitcoin.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_bitcoin.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_bitcoin.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/menu_bottom_navigation_menu.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/menu/bottom_navigation_menu.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_primary_button_bg.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/primary_button_bg.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_trending_up.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_trending_up.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_sell.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_sell.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/layout_fragment_home.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/layout/fragment_home.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_support.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_support.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_action_button_bg_transfer.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/action_button_bg_transfer.xml"
     },
     {
-        "merged": "com.yourgpt.sdk.example-merged_res-49:/layout_fragment_support.xml.flat",
-        "source": "com.yourgpt.sdk.example-main-51:/layout/fragment_support.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_orders.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_orders.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_tab_background.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/tab_background.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_action_button_bg_sell.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/action_button_bg_sell.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_percentage_badge_bg.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/percentage_badge_bg.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_ethereum.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_ethereum.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_crypto_icon_bg.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/crypto_icon_bg.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/layout_fragment_exchange.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/layout/fragment_exchange.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_empty_orders.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_empty_orders.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_action_button_bg_buy.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/action_button_bg_buy.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_trending_up.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_trending_up.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/drawable_ic_chat.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/drawable/ic_chat.xml"
     },
     {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/drawable_ic_transfer.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/drawable/ic_transfer.xml"
-    },
-    {
-        "merged": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-merged_res-49:/layout_fragment_exchange.xml.flat",
-        "source": "/Users/d4-f2/.gradle/daemon/8.5/com.yourgpt.sdk.example-main-51:/layout/fragment_exchange.xml"
+        "merged": "com.yourgpt.sdk.example-merged_res-64:/layout_fragment_support.xml.flat",
+        "source": "com.yourgpt.sdk.example-main-66:/layout/fragment_support.xml"
     }
 ]

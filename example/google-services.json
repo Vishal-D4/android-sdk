@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "70997619986",
+    "project_id": "android-sdk-widget",
+    "storage_bucket": "android-sdk-widget.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70997619986:android:915ccb058330b88e002fcb",
+        "android_client_info": {
+          "package_name": "com.yourgpt.sdk.example"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsRgA9W7KJvFrTMl_qFqnmSdlT-7-xj5s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
