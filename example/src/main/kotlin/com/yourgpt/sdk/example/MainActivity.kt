@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         /** Replace with your actual YourGPT widget UID */
-        const val WIDGET_UID = "cad24e4c-6ad9-41ef-b535-3731b48dfa71"
+        const val WIDGET_UID = "cad24e4c-6ad9-41ef-c8821-3731b48dad321"
     }
 
     // Notification permission launcher for Android 13+
