@@ -25,12 +25,7 @@ object YourGPTNotificationClient {
     private var isInitialized = false
     private var cachedFcmToken: String? = null
     private var isTokenRegisteredViaWebView = false
-    
-    enum class NotificationMode {
-        MINIMALIST,  // Auto-handle everything
-        ADVANCED,    // Custom handling with callbacks
-        DISABLED     // No notifications
-    }
+    private var appContext: Context? = null
     
     /**
      * Initialize notification client with minimal configuration
@@ -49,15 +44,23 @@ object YourGPTNotificationClient {
         this.widgetUid = widgetUid
         this.notificationMode = mode
         this.isInitialized = true
+        this.appContext = context.applicationContext
 
         // Persist widgetUid so the service can self-initialize when the app is killed
-        context.getSharedPreferences("yourgpt_sdk_prefs", Context.MODE_PRIVATE)
-            .edit()
+        val prefs = context.getSharedPreferences("yourgpt_sdk_prefs", Context.MODE_PRIVATE)
+        prefs.edit()
             .putString("widget_uid", widgetUid)
             .apply()
 
+        // Restore cached FCM token from SharedPreferences if available
+        val storedToken = prefs.getString("fcm_token", null)
+        if (storedToken != null && cachedFcmToken == null) {
+            cachedFcmToken = storedToken
+            Log.d(TAG, "Restored FCM token from SharedPreferences")
+        }
+
         Log.d(TAG, "Initialized with widget: $widgetUid, mode: $mode")
-        
+
         // Auto-fetch and cache token if in minimalist mode
         if (mode == NotificationMode.MINIMALIST) {
             CoroutineScope(Dispatchers.IO).launch {
@@ -153,6 +156,14 @@ object YourGPTNotificationClient {
     fun cacheToken(token: String) {
         cachedFcmToken = token
         isTokenRegisteredViaWebView = false
+
+        // Persist to SharedPreferences so the token survives app restarts
+        appContext?.getSharedPreferences("yourgpt_sdk_prefs", Context.MODE_PRIVATE)
+            ?.edit()
+            ?.putString("fcm_token", token)
+            ?.putLong("fcm_token_timestamp", System.currentTimeMillis())
+            ?.apply()
+
         Log.d(TAG, "FCM token cached, will register via WebView when widget opens")
     }
 

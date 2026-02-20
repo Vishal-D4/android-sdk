@@ -304,7 +304,7 @@ val config = YourGPTConfig(
 
 // Or change at runtime
 YourGPTNotificationClient.setNotificationMode(
-    YourGPTNotificationClient.NotificationMode.ADVANCED
+    NotificationMode.ADVANCED
 )
 ```
 
@@ -346,7 +346,67 @@ val config = YourGPTConfig(
 
 ---
 
-## Utility Methods
+## SDK Methods Reference
+
+### Notification Identification
+
+```kotlin
+// Check if a RemoteMessage is from YourGPT
+// Useful in Advanced mode to filter YourGPT notifications from other FCM messages
+val isYourGPT = YourGPTNotificationClient.isYourGPTNotification(remoteMessage)
+
+// Let the SDK handle an incoming notification
+// Returns true if handled (MINIMALIST mode), false otherwise
+val handled = YourGPTNotificationClient.handleNotification(context, remoteMessage)
+```
+
+### Notification Click Handling
+
+```kotlin
+// Handle notification tap — opens the widget automatically
+// Call in both onCreate() and onNewIntent()
+val handled = YourGPTNotificationClient.handleNotificationClick(activity, intent)
+```
+
+### Token Management
+
+```kotlin
+// Get the cached FCM token (synchronous)
+val token = YourGPTNotificationClient.getCachedToken()
+
+// Fetch a fresh token from Firebase (suspend function)
+lifecycleScope.launch {
+    val token = YourGPTNotificationClient.getFirebaseToken()
+}
+
+// Reset token — deletes current token and fetches a new one
+// Useful when user logs out/in
+YourGPTNotificationClient.resetToken(context)
+```
+
+### Widget
+
+```kotlin
+// Open the YourGPT widget programmatically
+YourGPTNotificationClient.openWidget(activity)
+```
+
+### State & Mode
+
+```kotlin
+// Check if notification client is initialized
+val ready = YourGPTNotificationClient.isInitialized()
+
+// Get current notification mode
+val mode = YourGPTNotificationClient.getNotificationMode()
+
+// Change notification mode at runtime
+YourGPTNotificationClient.setNotificationMode(
+    NotificationMode.ADVANCED
+)
+```
+
+### Notification Utilities
 
 ```kotlin
 // Check if notifications are enabled on the device
@@ -355,15 +415,134 @@ val enabled = YourGPTNotificationHelper.areNotificationsEnabled(context)
 // Cancel all YourGPT notifications
 YourGPTNotificationHelper.cancelAllNotifications(context)
 
-// Cancel a specific notification
+// Cancel a specific notification by ID
 YourGPTNotificationHelper.cancelNotification(context, notificationId)
 
-// Get the cached FCM token
-val token = YourGPTNotificationClient.getCachedToken()
-
-// Reset FCM token (useful on user logout)
-YourGPTNotificationClient.resetToken(context)
+// Create or update the notification channel (Android 8.0+)
+YourGPTNotificationHelper.createNotificationChannel(context)
 ```
+
+---
+
+## Advanced Mode: Custom Notification Handling
+
+If you use `ADVANCED` mode, the SDK identifies YourGPT notifications but does **not** display them — your app handles display. This gives you full control over styling, actions, and message routing.
+
+### When to Use Advanced Mode
+
+- Custom notification styling beyond the SDK defaults
+- Different handling for different message types (urgent, promotional, etc.)
+- Integration with your own backend alongside YourGPT
+- Custom actions on notifications
+- Analytics or logging of notification events
+
+### Custom FirebaseMessagingService
+
+Create your own service that replaces the SDK's built-in one:
+
+```kotlin
+package com.yourapp
+
+import android.graphics.BitmapFactory
+import android.util.Log
+import androidx.core.app.NotificationCompat
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
+import com.yourgpt.sdk.NotificationMode
+import com.yourgpt.sdk.YourGPTNotificationClient
+import com.yourgpt.sdk.YourGPTNotificationHelper
+
+class CustomNotificationService : FirebaseMessagingService() {
+
+    companion object {
+        private const val TAG = "CustomNotificationService"
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        // Initialize in ADVANCED mode
+        YourGPTNotificationClient.initialize(
+            context = applicationContext,
+            widgetUid = "YOUR_WIDGET_UID",
+            mode = NotificationMode.ADVANCED
+        )
+    }
+
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        // Cache token — it will be sent to the backend via WebView JS bridge
+        YourGPTNotificationClient.cacheToken(token)
+        // Optionally send to your own backend too
+    }
+
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
+
+        if (YourGPTNotificationClient.isYourGPTNotification(remoteMessage)) {
+            handleYourGPTMessage(remoteMessage)
+        } else {
+            // Handle other (non-YourGPT) notifications
+        }
+    }
+
+    private fun handleYourGPTMessage(remoteMessage: RemoteMessage) {
+        val data = remoteMessage.data
+        val senderName = data["title"] ?: "YourGPT Assistant"
+        val messageContent = data["body"] ?: "New message"
+        val messageId = data["messageId"] ?: System.currentTimeMillis().toString()
+        val conversationId = data["session_uid"]
+
+        // Create click intent that opens the widget
+        val clickIntent = YourGPTNotificationHelper.createWidgetDeepLink(
+            context = this,
+            widgetUid = data["widget_uid"] ?: "YOUR_WIDGET_UID",
+            conversationId = conversationId
+        )
+        val pendingIntent = YourGPTNotificationHelper.createClickPendingIntent(
+            context = this,
+            intent = clickIntent,
+            requestCode = messageId.hashCode()
+        )
+
+        // Build your custom notification
+        val builder = YourGPTNotificationHelper.createRichNotification(
+            context = this,
+            title = senderName,
+            message = messageContent,
+            bigText = messageContent,
+            clickIntent = pendingIntent
+        ).apply {
+            // Custom styling
+            color = getColor(R.color.colorPrimary)
+            val largeIcon = BitmapFactory.decodeResource(resources, R.drawable.ic_chat)
+            setLargeIcon(largeIcon)
+        }
+
+        YourGPTNotificationHelper.showNotification(
+            context = this,
+            notificationId = messageId.hashCode(),
+            builder = builder
+        )
+    }
+}
+```
+
+### AndroidManifest.xml for Custom Service
+
+Replace the SDK's built-in service with your custom one:
+
+```xml
+<!-- Remove or replace the SDK service -->
+<service
+    android:name=".CustomNotificationService"
+    android:exported="false">
+    <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT" />
+    </intent-filter>
+</service>
+```
+
+> **Note:** Only one `FirebaseMessagingService` can handle `MESSAGING_EVENT` per app. If you register a custom service, do **not** also register `com.yourgpt.sdk.YourGPTNotificationService`.
 
 ---
 

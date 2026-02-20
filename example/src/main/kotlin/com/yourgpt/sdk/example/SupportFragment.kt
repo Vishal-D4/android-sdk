@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import com.yourgpt.sdk.YourGPTConfig
 import com.yourgpt.sdk.YourGPTSDK
 
 class SupportFragment : Fragment() {
@@ -29,11 +28,7 @@ class SupportFragment : Fragment() {
     }
     
     private fun openChatSupport() {
-        val configuration = YourGPTConfig(
-            widgetUid = "cad24e4c-6ad9-41ef-b535-3731b48dfa71",
-        )
-        
-        // Open the chatbot bottom sheet
-        YourGPTSDK.openChatbotBottomSheet(parentFragmentManager, configuration)
+        val activity = requireActivity() as? androidx.fragment.app.FragmentActivity ?: return
+        YourGPTSDK.show(activity)
     }
 }

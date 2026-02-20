@@ -19,6 +19,7 @@ object YourGPTSDKConfig {
         /**
          * Base widget URL - DO NOT CHANGE without coordination
          */
+        // TODO: Replace with production URL before release (e.g. https://widget.yourgpt.ai)
         const val WIDGET_BASE = "https://55dzb1kl-5174.inc1.devtunnels.ms"
         
         /**

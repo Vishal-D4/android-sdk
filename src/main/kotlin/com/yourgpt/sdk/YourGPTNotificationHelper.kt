@@ -305,40 +305,4 @@ object YourGPTNotificationHelper {
         return System.currentTimeMillis().toInt()
     }
     
-    /**
-     * Build a stacked notification for multiple messages
-     */
-    fun createStackedNotification(
-        context: Context,
-        messages: List<MessageInfo>,
-        clickIntent: PendingIntent? = null
-    ): NotificationCompat.Builder {
-        val inboxStyle = NotificationCompat.InboxStyle()
-        
-        messages.takeLast(5).forEach { message ->
-            inboxStyle.addLine("${message.sender}: ${message.content}")
-        }
-        
-        inboxStyle.setSummaryText("${messages.size} new messages")
-        
-        return NotificationCompat.Builder(context, DEFAULT_CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
-            .setContentTitle("YourGPT Messages")
-            .setContentText("You have ${messages.size} new messages")
-            .setStyle(inboxStyle)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
-            .apply {
-                clickIntent?.let { setContentIntent(it) }
-            }
-    }
-    
-    /**
-     * Data class for message information
-     */
-    data class MessageInfo(
-        val sender: String,
-        val content: String,
-        val timestamp: Long
-    )
 }

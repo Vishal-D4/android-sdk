@@ -16,7 +16,12 @@ import com.yourgpt.sdk.YourGPTNotificationClient
  * with push notifications
  */
 class MainActivity : AppCompatActivity() {
-    
+
+    companion object {
+        /** Replace with your actual YourGPT widget UID */
+        const val WIDGET_UID = "cad24e4c-6ad9-41ef-b535-3731b48dfa71"
+    }
+
     // Notification permission launcher for Android 13+
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -37,32 +42,22 @@ class MainActivity : AppCompatActivity() {
         // 1. Quick setup with YourGPT widget (Minimalist mode - handles everything automatically)
         YourGPTNotificationClient.quickSetup(
             context = this,
-            widgetUid = "cad24e4c-6ad9-41ef-b535-3731b48dfa71"
+            widgetUid = WIDGET_UID
         )
         
         // 2. Request notification permission for Android 13+
         requestNotificationPermission()
         
-        // 3. Handle notification clicks when app opens from notification
-        handleNotificationIntent(intent)
-        
         // ===== END OF SIMPLE INTEGRATION =====
-        
-        // Navigate to the main app screen
-        startActivity(Intent(this, HomeScreenActivity::class.java))
+
+        // Forward the intent to HomeScreenActivity (preserves notification extras)
+        val homeIntent = Intent(this, HomeScreenActivity::class.java)
+        intent?.let {
+            homeIntent.action = it.action
+            it.extras?.let { extras -> homeIntent.putExtras(extras) }
+        }
+        startActivity(homeIntent)
         finish()
-    }
-    
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        // Handle notification clicks if app was already running
-        intent?.let { handleNotificationIntent(it) }
-    }
-    
-    private fun handleNotificationIntent(intent: Intent) {
-        // Let the NotificationClient handle it in minimalist mode
-        // It will automatically open the widget if needed
-        YourGPTNotificationClient.handleNotificationClick(this, intent)
     }
     
     private fun requestNotificationPermission() {
@@ -97,7 +92,7 @@ class MainActivity : AppCompatActivity() {
  *         YourGPTNotificationClient.initialize(
  *             context = this,
  *             widgetUid = "your-widget-uid",
- *             mode = YourGPTNotificationClient.NotificationMode.ADVANCED
+ *             mode = NotificationMode.ADVANCED
  *         )
  *         
  *         // In advanced mode, you handle the notifications yourself

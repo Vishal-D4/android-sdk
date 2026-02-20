@@ -39,14 +39,9 @@ data class YourGPTNotificationConfig(
     // Actions
     val showReplyAction: Boolean = true,
     val replyIconRes: Int = android.R.drawable.ic_menu_send,
-    val showMarkAsReadAction: Boolean = false,
-    val markAsReadIconRes: Int = android.R.drawable.ic_menu_view,
-    
+
     // Auto-cancel
     val autoCancel: Boolean = true,
-    
-    // Badge settings (for app icon)
-    val showBadge: Boolean = true,
     
     // Quiet hours (in 24-hour format)
     val quietHoursEnabled: Boolean = false,
@@ -122,10 +117,7 @@ data class YourGPTNotificationConfig(
         if (groupKey != other.groupKey) return false
         if (showReplyAction != other.showReplyAction) return false
         if (replyIconRes != other.replyIconRes) return false
-        if (showMarkAsReadAction != other.showMarkAsReadAction) return false
-        if (markAsReadIconRes != other.markAsReadIconRes) return false
         if (autoCancel != other.autoCancel) return false
-        if (showBadge != other.showBadge) return false
         if (quietHoursEnabled != other.quietHoursEnabled) return false
         if (quietHoursStart != other.quietHoursStart) return false
         if (quietHoursEnd != other.quietHoursEnd) return false
@@ -158,10 +150,7 @@ data class YourGPTNotificationConfig(
         result = 31 * result + groupKey.hashCode()
         result = 31 * result + showReplyAction.hashCode()
         result = 31 * result + replyIconRes
-        result = 31 * result + showMarkAsReadAction.hashCode()
-        result = 31 * result + markAsReadIconRes
         result = 31 * result + autoCancel.hashCode()
-        result = 31 * result + showBadge.hashCode()
         result = 31 * result + quietHoursEnabled.hashCode()
         result = 31 * result + quietHoursStart
         result = 31 * result + quietHoursEnd
@@ -196,10 +185,7 @@ data class YourGPTNotificationConfig(
             private var groupKey = "com.yourgpt.sdk.MESSAGES"
             private var showReplyAction = true
             private var replyIconRes = android.R.drawable.ic_menu_send
-            private var showMarkAsReadAction = false
-            private var markAsReadIconRes = android.R.drawable.ic_menu_view
             private var autoCancel = true
-            private var showBadge = true
             private var quietHoursEnabled = false
             private var quietHoursStart = 22
             private var quietHoursEnd = 8
@@ -230,10 +216,7 @@ data class YourGPTNotificationConfig(
             fun setGroupKey(key: String) = apply { groupKey = key }
             fun setShowReplyAction(show: Boolean) = apply { showReplyAction = show }
             fun setReplyIcon(resId: Int) = apply { replyIconRes = resId }
-            fun setShowMarkAsReadAction(show: Boolean) = apply { showMarkAsReadAction = show }
-            fun setMarkAsReadIcon(resId: Int) = apply { markAsReadIconRes = resId }
             fun setAutoCancel(enabled: Boolean) = apply { autoCancel = enabled }
-            fun setShowBadge(show: Boolean) = apply { showBadge = show }
             fun setQuietHours(enabled: Boolean, startHour: Int = 22, endHour: Int = 8) = apply {
                 quietHoursEnabled = enabled
                 quietHoursStart = startHour
@@ -271,10 +254,7 @@ data class YourGPTNotificationConfig(
                 groupKey = groupKey,
                 showReplyAction = showReplyAction,
                 replyIconRes = replyIconRes,
-                showMarkAsReadAction = showMarkAsReadAction,
-                markAsReadIconRes = markAsReadIconRes,
                 autoCancel = autoCancel,
-                showBadge = showBadge,
                 quietHoursEnabled = quietHoursEnabled,
                 quietHoursStart = quietHoursStart,
                 quietHoursEnd = quietHoursEnd,

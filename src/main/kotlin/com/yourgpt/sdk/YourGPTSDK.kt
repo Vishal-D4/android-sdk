@@ -1,6 +1,7 @@
 package com.yourgpt.sdk
 
 import android.content.Context
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import kotlinx.coroutines.flow.StateFlow
 
@@ -16,31 +17,12 @@ object YourGPTSDK {
         core.initialize(configuration)
         
         // Initialize notifications based on mode
-        if (configuration.enableNotifications) {
-            when (configuration.notificationMode) {
-                NotificationMode.MINIMALIST -> {
-                    // Initialize NotificationClient for automatic handling.
-                    // Token is fetched and cached during initialize().
-                    // It will be sent to the backend via WebView JS bridge
-                    // when the widget is opened — no public API needed.
-                    YourGPTNotificationClient.initialize(
-                        context = context,
-                        widgetUid = configuration.widgetUid,
-                        mode = YourGPTNotificationClient.NotificationMode.MINIMALIST
-                    )
-                }
-                NotificationMode.ADVANCED -> {
-                    // Initialize NotificationClient in advanced mode
-                    YourGPTNotificationClient.initialize(
-                        context = context,
-                        widgetUid = configuration.widgetUid,
-                        mode = YourGPTNotificationClient.NotificationMode.ADVANCED
-                    )
-                }
-                NotificationMode.DISABLED -> {
-                    // Notifications disabled, do nothing
-                }
-            }
+        if (configuration.enableNotifications && configuration.notificationMode != NotificationMode.DISABLED) {
+            YourGPTNotificationClient.initialize(
+                context = context,
+                widgetUid = configuration.widgetUid,
+                mode = configuration.notificationMode
+            )
         }
     }
     
@@ -65,8 +47,19 @@ object YourGPTSDK {
     
     fun openChatbotBottomSheet(fragmentManager: FragmentManager, configuration: YourGPTConfig) {
         val bottomSheet = ChatbotBottomSheetDialog.newInstance(configuration)
-        // Show the dialog but keep it hidden until loading is complete
         bottomSheet.show(fragmentManager, "ChatbotBottomSheet")
+    }
+
+    /**
+     * Open the chatbot widget using the configuration from initialize().
+     * Simplest way to show the widget — one-liner after initialization.
+     *
+     * Example: YourGPTSDK.show(this)
+     */
+    fun show(activity: FragmentActivity) {
+        val config = core.currentConfig
+            ?: throw IllegalStateException("SDK not initialized. Call initialize() first.")
+        openChatbotBottomSheet(activity.supportFragmentManager, config)
     }
 
     suspend fun setUserContext(context: Map<String, Any>) {
