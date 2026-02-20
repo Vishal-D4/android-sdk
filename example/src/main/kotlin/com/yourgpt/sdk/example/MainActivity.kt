@@ -13,7 +13,7 @@ import com.yourgpt.sdk.YourGPTNotificationClient
 
 /**
  * MainActivity demonstrating the simplest integration of YourGPT SDK
- * with push notifications using the Crisp-style approach
+ * with push notifications
  */
 class MainActivity : AppCompatActivity() {
     
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         // 1. Quick setup with YourGPT widget (Minimalist mode - handles everything automatically)
         YourGPTNotificationClient.quickSetup(
             context = this,
-            widgetUid = "69dd8b5d-d4bf-444c-a40f-732d15248ae9"
+            widgetUid = "cad24e4c-6ad9-41ef-b535-3731b48dfa71"
         )
         
         // 2. Request notification permission for Android 13+

@@ -34,7 +34,6 @@
         android:extractNativeLibs="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:testOnly="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
         <activity
             android:name="com.yourgpt.sdk.example.MainActivity"
@@ -48,13 +47,6 @@
         <activity
             android:name="com.yourgpt.sdk.example.HomeScreenActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
-        <!-- Include YourGPT SDK activities -->
-        <activity
-            android:name="com.yourgpt.sdk.ChatbotActivity"
-            android:exported="false"
-            android:hardwareAccelerated="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
         <!-- Firebase Messaging Service for notifications -->

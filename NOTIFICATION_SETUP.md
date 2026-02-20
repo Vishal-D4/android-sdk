@@ -1,35 +1,42 @@
-# YourGPT Widget SDK - Push Notification Setup
+# YourGPT Android SDK - Push Notification Setup
 
-This guide explains how to set up push notifications for the YourGPT Widget SDK, allowing your app to receive notifications when there are new messages in the widget, even when the app is closed.
+This guide explains how to enable push notifications in your Android app using the YourGPT SDK. When set up, your users will receive notifications for new messages from the YourGPT widget even when the app is in the background or closed.
 
 ## Features
 
-- **Background Notifications**: Receive notifications when app is closed or in background
-- **Rich Notifications**: Display message preview with sender information
-- **Click Actions**: Tap notification to open widget directly
-- **Customizable**: Configure sound, vibration, LED, and quiet hours
-- **Reply Actions**: Quick reply buttons in notifications
-- **Notification Grouping**: Stack multiple messages intelligently
+- **Background Notifications**: Receive messages when the app is closed or in the background
+- **Automatic Token Management**: FCM token is fetched, cached, and registered with the backend automatically
+- **Two Modes**: Minimalist (auto-handles everything) or Advanced (custom handling)
 
 ## Prerequisites
 
-1. Firebase project configured for your app
-2. Google Play Services on the device
+1. A Firebase project linked to your Android app
+2. Your YourGPT **widget UID**
 3. Android 5.0 (API 21) or higher
-4. YourGPT widget UID
+4. Google Play Services on the target device
 
-## Setup Instructions
+---
 
-### Step 1: Firebase Configuration
+## Step 1: Firebase Configuration
 
-1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com)
-2. Add your Android app to the Firebase project
+1. Go to [Firebase Console](https://console.firebase.google.com) and create a project (or use an existing one)
+2. Add your Android app (use your app's package name)
 3. Download the `google-services.json` file
-4. Place `google-services.json` in your app module directory (`/app/`)
+4. Place `google-services.json` in your app module directory (e.g., `app/`)
 
-### Step 2: Update Build Configuration
+### Add the Google Services plugin
 
-Add the Google Services plugin to your app-level `build.gradle`:
+In your **project-level** `build.gradle`:
+
+```gradle
+buildscript {
+    dependencies {
+        classpath 'com.google.gms:google-services:4.4.0'
+    }
+}
+```
+
+In your **app-level** `build.gradle`:
 
 ```gradle
 plugins {
@@ -38,288 +45,412 @@ plugins {
 }
 ```
 
-The SDK already includes Firebase dependencies, so no additional dependencies are needed.
+The YourGPT SDK already bundles Firebase Messaging — no additional Firebase dependencies are needed.
 
-### Step 3: Initialize SDK with Notifications
+---
+
+## Step 2: Configure Push Notifications on YourGPT Dashboard
+
+Before your backend can send FCM notifications, you need to upload your Firebase credentials to the YourGPT dashboard.
+
+1. Go to **Firebase Console** → **Project Settings** → **General** and note your **Project Number**
+2. Go to **Firebase Console** → **Project Settings** → **Service Accounts**
+3. Click **"Generate new private key"** and download the `.json` file
+4. Log in to the [YourGPT Dashboard](https://app.yourgpt.ai)
+5. Navigate to your chatbot's **Settings** → **Push Notifications**
+6. Enable the **Firebase Cloud Messaging** toggle
+7. Enter your **Firebase Project Number**
+8. Upload the service account JSON file you downloaded in step 3
+9. Click **Save Credentials** — the dashboard will verify the credentials automatically
+
+Once the status shows **"Configured"**, your YourGPT backend is ready to send push notifications.
+
+---
+
+## Step 3: Register the Notification Service
+
+Add `YourGPTNotificationService` to your app's `AndroidManifest.xml` inside the `<application>` tag:
+
+```xml
+<!-- Firebase Messaging Service for YourGPT notifications -->
+<service
+    android:name="com.yourgpt.sdk.YourGPTNotificationService"
+    android:exported="false">
+    <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT" />
+    </intent-filter>
+</service>
+```
+
+Also ensure you have the notification permission declared:
+
+```xml
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+```
+
+---
+
+## Step 4: Initialize the SDK with Notifications
+
+There are two ways to initialize: **Quick Setup** (recommended) or **Full Configuration**.
+
+### Option A: Quick Setup (Recommended)
+
+The simplest way — one line to enable everything:
 
 ```kotlin
 import com.yourgpt.sdk.*
 
-class MainActivity : AppCompatActivity(), YourGPTEventListener {
-    
+class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // Configure notifications
-        val notificationConfig = YourGPTNotificationConfig.builder()
-            .setNotificationsEnabled(true)
-            .setSmallIcon(R.drawable.ic_notification)
-            .setShowReplyAction(true)
-            .setVibrationEnabled(true)
-            .setSoundEnabled(true)
-            .setMessagePreview(true, 150)
-            .setQuietHours(false, 22, 8) // Optional: 10 PM to 8 AM
-            .build()
-        
-        // Initialize SDK with notifications
+        setContentView(R.layout.activity_main)
+
+        // Initialize SDK with notifications in one line
+        lifecycleScope.launch {
+            YourGPTSDK.quickInitialize(this@MainActivity, "YOUR_WIDGET_UID")
+        }
+    }
+}
+```
+
+This automatically:
+
+- Initializes the SDK
+- Fetches and caches the FCM token
+- Creates the notification channel
+- Enables minimalist notification handling
+
+### Option B: Full Configuration
+
+For more control over notification behavior:
+
+```kotlin
+import com.yourgpt.sdk.*
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
         val config = YourGPTConfig(
             widgetUid = "YOUR_WIDGET_UID",
             enableNotifications = true,
-            notificationConfig = notificationConfig
+            notificationMode = NotificationMode.MINIMALIST  // or ADVANCED
         )
-        
+
         lifecycleScope.launch {
             YourGPTSDK.initialize(this@MainActivity, config)
-            
-            // Subscribe to widget notifications
-            YourGPTSDK.subscribeToWidgetTopic(config.widgetUid)
         }
-        
-        // Set event listener
-        YourGPTSDK.setEventListener(this)
-    }
-    
-    // Handle notification events
-    override fun onFCMTokenReceived(token: String) {
-        // FCM token received - send to your backend if needed
-        Log.d("MainActivity", "FCM Token: $token")
-    }
-    
-    override fun onNotificationClicked(extras: Map<String, String>) {
-        // Handle notification click
-        val widgetUid = extras["widget_uid"]
-        val messageId = extras["message_id"]
-        
-        // Open the widget
-        openYourGPTWidget()
-    }
-    
-    override fun onWidgetOpenRequested(widgetUid: String) {
-        // Auto-open widget when requested
-        openYourGPTWidget()
     }
 }
 ```
 
-### Step 4: Request Notification Permission (Android 13+)
+---
 
-For Android 13 (API 33) and higher, request notification permission:
+## Step 5: Request Notification Permission (Android 13+)
+
+Android 13 (API 33) and above requires runtime permission for notifications. Add this to your activity:
 
 ```kotlin
-private val notificationPermissionLauncher = registerForActivityResult(
-    ActivityResultContracts.RequestPermission()
-) { isGranted: Boolean ->
-    if (isGranted) {
-        // Permission granted
-    } else {
-        // Permission denied
-    }
-}
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 
-private fun checkNotificationPermission() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        when {
-            ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                // Permission already granted
-            }
-            else -> {
-                // Request permission
-                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+class MainActivity : AppCompatActivity() {
+
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // Notifications enabled
+        } else {
+            // User denied — notifications won't be shown
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // ... SDK initialization ...
+
+        requestNotificationPermission()
+    }
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    // Already granted
+                }
+                shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS) -> {
+                    // Show explanation to user, then request
+                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+                else -> {
+                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
             }
         }
     }
 }
 ```
 
-### Step 5: Handle Notification Intents
+---
 
-Handle notification clicks when app is launched from notification:
+## Step 6: Handle Notification Clicks
+
+When a user taps a notification, the SDK can automatically open the widget. Add click handling in your launcher activity:
 
 ```kotlin
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    handleNotificationIntent(intent)
-}
+class MainActivity : AppCompatActivity() {
 
-override fun onNewIntent(intent: Intent?) {
-    super.onNewIntent(intent)
-    intent?.let { handleNotificationIntent(it) }
-}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // ... SDK initialization ...
 
-private fun handleNotificationIntent(intent: Intent) {
-    if (YourGPTSDK.handleNotificationIntent(intent)) {
-        // SDK handled the notification
-        return
+        // Handle notification click that launched the app
+        handleNotificationIntent(intent)
     }
-    
-    // Custom handling if needed
-    when (intent.action) {
-        "com.yourgpt.sdk.OPEN_WIDGET" -> {
-            // Open widget
-            openYourGPTWidget()
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        // Handle notification click when app is already running
+        intent?.let { handleNotificationIntent(it) }
+    }
+
+    private fun handleNotificationIntent(intent: Intent) {
+        // Let the SDK handle it — opens the widget automatically
+        if (YourGPTNotificationClient.handleNotificationClick(this, intent)) {
+            return
+        }
+
+        // Optional: custom handling for the OPEN_WIDGET action
+        if (intent.action == "com.yourgpt.sdk.OPEN_WIDGET") {
+            // Navigate to your chat screen or open the widget manually
+            val config = YourGPTConfig(widgetUid = "YOUR_WIDGET_UID")
+            YourGPTSDK.openChatbotBottomSheet(supportFragmentManager, config)
         }
     }
 }
 ```
 
-## Notification Configuration Options
+---
 
-### Basic Configuration
+## Step 7: Open the Widget at Least Once
+
+The FCM token is registered with the YourGPT backend **through the WebView JS bridge** when the widget is opened. Until the widget is opened at least once, the backend won't know where to send notifications.
 
 ```kotlin
-YourGPTNotificationConfig.builder()
-    .setNotificationsEnabled(true)              // Enable/disable notifications
-    .setSmallIcon(R.drawable.ic_notification)   // Notification icon
-    .setAutoCancel(true)                        // Auto-dismiss on click
+// Open the widget (e.g., on a button click)
+val config = YourGPTConfig(widgetUid = "YOUR_WIDGET_UID")
+YourGPTSDK.openChatbotBottomSheet(supportFragmentManager, config)
+```
+
+After the widget loads, the SDK automatically sends the cached FCM token to the backend. Subsequent token refreshes are also sent automatically the next time the widget is opened.
+
+---
+
+## How It Works
+
+Here's the full notification flow:
+
+```
+1. App starts → SDK initializes → FCM token fetched and cached locally
+2. User opens widget → Token sent to YourGPT backend via WebView JS bridge
+3. New message on backend → FCM data message sent to device
+4. YourGPTNotificationService receives message → YourGPTNotificationClient handles it
+5. Notification displayed → User taps → Widget opens via handleNotificationClick()
+```
+
+### Token Registration Flow
+
+```
+App Init
+  └→ YourGPTNotificationClient.initialize()
+       └→ Fetches FCM token via FirebaseMessaging
+       └→ Caches token in memory
+
+Widget Opened
+  └→ ChatbotBottomSheetDialog WebView loads
+       └→ YourGPTNotificationClient.registerTokenViaWebView(webView)
+            └→ Sends token to backend via window.postMessage()
+```
+
+---
+
+## Notification Modes
+
+| Mode         | Description                                                                              | Use Case                                |
+| ------------ | ---------------------------------------------------------------------------------------- | --------------------------------------- |
+| `MINIMALIST` | Auto-handles everything: display, grouping, click actions                                | Most apps — zero custom code needed     |
+| `ADVANCED`   | SDK identifies YourGPT notifications but does not display them; your app handles display | Apps that need custom notification UI   |
+| `DISABLED`   | No notification handling                                                                 | Apps that don't want push notifications |
+
+### Setting the Mode
+
+```kotlin
+// Via config during initialization
+val config = YourGPTConfig(
+    widgetUid = "YOUR_WIDGET_UID",
+    enableNotifications = true,
+    notificationMode = NotificationMode.MINIMALIST  // or ADVANCED, DISABLED
+)
+
+// Or change at runtime
+YourGPTNotificationClient.setNotificationMode(
+    YourGPTNotificationClient.NotificationMode.ADVANCED
+)
+```
+
+---
+
+## Advanced: Notification Configuration
+
+You can customize notification appearance using `YourGPTNotificationConfig`:
+
+```kotlin
+val notificationConfig = YourGPTNotificationConfig.builder()
+    .setNotificationsEnabled(true)
+    .setSmallIcon(R.drawable.ic_notification)  // Your custom icon
+    .setSoundEnabled(true)
+    .setVibrationEnabled(true)
     .build()
+
+val config = YourGPTConfig(
+    widgetUid = "YOUR_WIDGET_UID",
+    enableNotifications = true,
+    notificationConfig = notificationConfig
+)
 ```
 
-### Sound & Vibration
+### Available Configuration Options
+
+| Option                             | Default              | Description                                      |
+| ---------------------------------- | -------------------- | ------------------------------------------------ |
+| `setNotificationsEnabled(Boolean)` | `true`               | Enable/disable notifications                     |
+| `setSmallIcon(Int)`                | System default       | Notification icon resource                       |
+| `setSoundEnabled(Boolean)`         | `true`               | Play sound on notification                       |
+| `setSoundUri(Uri?)`                | System default       | Custom notification sound                        |
+| `setVibrationEnabled(Boolean)`     | `true`               | Vibrate on notification                          |
+| `setVibrationPattern(LongArray)`   | `[0, 250, 250, 250]` | Custom vibration pattern                         |
+| `setLedEnabled(Boolean)`           | `true`               | LED indicator                                    |
+| `setLedColor(Int)`                 | `Color.BLUE`         | LED color                                        |
+| `setQuietHours(Boolean, Int, Int)` | Disabled             | Suppress notifications during hours (24h format) |
+| `setMessagePreview(Boolean, Int)`  | `true`, 100 chars    | Show message preview in notification             |
+
+---
+
+## Utility Methods
 
 ```kotlin
-YourGPTNotificationConfig.builder()
-    .setSoundEnabled(true)                      // Enable sound
-    .setSoundUri(customSoundUri)                // Custom sound (optional)
-    .setVibrationEnabled(true)                  // Enable vibration
-    .setVibrationPattern(longArrayOf(0, 250, 250, 250))
-    .build()
+// Check if notifications are enabled on the device
+val enabled = YourGPTNotificationHelper.areNotificationsEnabled(context)
+
+// Cancel all YourGPT notifications
+YourGPTNotificationHelper.cancelAllNotifications(context)
+
+// Cancel a specific notification
+YourGPTNotificationHelper.cancelNotification(context, notificationId)
+
+// Get the cached FCM token
+val token = YourGPTNotificationClient.getCachedToken()
+
+// Reset FCM token (useful on user logout)
+YourGPTNotificationClient.resetToken(context)
 ```
 
-### LED Configuration
+---
+
+## Complete Example
 
 ```kotlin
-YourGPTNotificationConfig.builder()
-    .setLedEnabled(true)                        // Enable LED
-    .setLedColor(Color.BLUE)                    // LED color
-    .setLedTiming(300, 3000)                    // On/off duration in ms
-    .build()
-```
+class MainActivity : AppCompatActivity() {
 
-### Message Preview
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted -> /* handle result */ }
 
-```kotlin
-YourGPTNotificationConfig.builder()
-    .setMessagePreview(true, 150)               // Show preview, max 150 chars
-    .build()
-```
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-### Quiet Hours
+        // 1. Initialize SDK with notifications
+        lifecycleScope.launch {
+            YourGPTSDK.quickInitialize(this@MainActivity, "YOUR_WIDGET_UID")
+        }
 
-```kotlin
-YourGPTNotificationConfig.builder()
-    .setQuietHours(true, 22, 8)                 // No notifications 10 PM - 8 AM
-    .build()
-```
+        // 2. Request notification permission (Android 13+)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
 
-### Notification Grouping
+        // 3. Handle notification click
+        handleNotificationIntent(intent)
 
-```kotlin
-YourGPTNotificationConfig.builder()
-    .setGroupMessages(true)                     // Group notifications
-    .setStackNotifications(true, 5)             // Stack up to 5 notifications
-    .build()
-```
+        // 4. Open widget on button click
+        findViewById<Button>(R.id.btn_open_chat).setOnClickListener {
+            val config = YourGPTConfig(widgetUid = "YOUR_WIDGET_UID")
+            YourGPTSDK.openChatbotBottomSheet(supportFragmentManager, config)
+        }
+    }
 
-## API Methods
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.let { handleNotificationIntent(it) }
+    }
 
-### Subscribe/Unsubscribe Topics
-
-```kotlin
-// Subscribe to widget notifications
-YourGPTSDK.subscribeToWidgetTopic("widget_uid")
-
-// Unsubscribe from widget notifications
-YourGPTSDK.unsubscribeFromWidgetTopic("widget_uid")
-```
-
-### Get FCM Token
-
-```kotlin
-lifecycleScope.launch {
-    val token = YourGPTSDK.getFCMToken()
-    // Use token as needed
+    private fun handleNotificationIntent(intent: Intent) {
+        YourGPTNotificationClient.handleNotificationClick(this, intent)
+    }
 }
 ```
 
-### Clear Notifications
+---
 
-```kotlin
-// Clear all notifications
-YourGPTSDK.clearAllNotifications()
-```
+## Testing
 
-### Check Notification Status
-
-```kotlin
-val enabled = YourGPTSDK.areNotificationsEnabled()
-```
-
-### Update Notification Config
-
-```kotlin
-val newConfig = YourGPTNotificationConfig.builder()
-    .setSoundEnabled(false)
-    .build()
-
-YourGPTSDK.updateNotificationConfig(newConfig)
-```
-
-## Testing Notifications
-
-1. Install the app on a physical device (notifications don't work on emulators without Google Play)
+1. Install the app on a physical device (FCM may not work on emulators without Google Play Services)
 2. Grant notification permission when prompted
-3. Close the app completely
-4. Send a test message through the YourGPT widget
-5. You should receive a notification
+3. Open the widget at least once (so the FCM token is registered with the backend)
+4. Close the app
+5. Send a test message through the YourGPT dashboard
+
+---
 
 ## Troubleshooting
 
 ### Notifications not received
 
-1. Check Firebase configuration is correct
-2. Verify notification permissions are granted
-3. Ensure Google Play Services are installed and updated
-4. Check if device is connected to internet
-5. Verify the widget UID is correct
+1. Verify Firebase credentials are uploaded and showing **"Configured"** on the YourGPT Dashboard (Settings → Push Notifications)
+2. Verify `google-services.json` is in the correct location and matches your package name
+3. Confirm the `YourGPTNotificationService` is declared in your `AndroidManifest.xml`
+4. Check that notification permission is granted (Settings > Apps > Your App > Notifications)
+5. Ensure the widget was opened at least once after SDK initialization (for token registration)
+6. Check logcat for `YourGPTNotificationClient` or `YourGPTNotificationService` logs
 
-### Notification permission issues
+### Notifications received but not displayed
 
-- For Android 13+, ensure you request `POST_NOTIFICATIONS` permission
-- Check app notification settings in device settings
-- Verify notification channel is not disabled
+1. Ensure `POST_NOTIFICATIONS` permission is granted on Android 13+
+2. Check that the notification channel `yourgpt_messages` is not disabled in device settings
+3. Verify `notificationMode` is not set to `DISABLED`
 
-### Firebase setup issues
+### Widget doesn't open on notification tap
 
-1. Ensure `google-services.json` is in the correct location
-2. Verify package name matches Firebase configuration
-3. Check Firebase Console for any error messages
+1. Ensure `handleNotificationClick()` is called in both `onCreate()` and `onNewIntent()`
+2. Verify your launcher activity handles the `com.yourgpt.sdk.OPEN_WIDGET` action
 
-## Backend Integration
+### Token not registered
 
-To send notifications from your backend:
-
-1. Store the FCM token received in `onFCMTokenReceived`
-2. Send notification payload to FCM with the following structure:
-
-```json
-{
-  "to": "FCM_TOKEN",
-  "data": {
-    "widget_uid": "YOUR_WIDGET_UID",
-    "type": "widget_message",
-    "message_id": "unique_message_id",
-    "conversation_id": "conversation_id",
-    "sender_name": "Assistant",
-    "message_content": "Hello! How can I help you today?",
-    "timestamp": "1234567890000"
-  },
-  "priority": "high"
-}
-```
+1. The FCM token is sent via the WebView JS bridge — the widget must be opened at least once
+2. Check logcat for `"FCM token successfully sent to widget backend"` message
+3. If the token was refreshed while the widget was closed, it will be re-sent next time the widget opens
 
 ## Support
 
-For issues or questions, please contact YourGPT support or refer to the main SDK documentation.
+For issues or questions, please refer to the main [README](README.md) or contact YourGPT support.

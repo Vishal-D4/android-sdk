@@ -312,6 +312,8 @@ class ChatbotBottomSheetDialog : BottomSheetDialogFragment() {
                 hideErrorView()
                 webViewContainer.visibility = View.VISIBLE
                 injectJavaScript()
+                // Send cached FCM token to widget backend via JS bridge
+                view?.let { YourGPTNotificationClient.registerTokenViaWebView(it) }
                 eventListener?.onLoadingFinished()
             }
             
@@ -394,18 +396,6 @@ class ChatbotBottomSheetDialog : BottomSheetDialogFragment() {
                 window.postMessage({
                     type: 'setUserContext',
                     payload: $contextJson
-                }, '*');
-            """.trimIndent()
-            
-            webView.evaluateJavascript(script, null)
-        }
-    }
-    
-    fun openChat() {
-        if (::webView.isInitialized) {
-            val script = """
-                window.postMessage({
-                    type: 'openChat'
                 }, '*');
             """.trimIndent()
             

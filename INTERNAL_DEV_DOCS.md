@@ -11,7 +11,7 @@ YourGPTSDKCore (Business Logic)
 ├── Coroutines for async operations
 └── Event-driven communication
 
-ChatbotActivity (UI Layer)
+ChatbotBottomSheetDialog (UI Layer)
 ├── Lifecycle-aware components
 ├── Flow-based state observation
 ├── Loading/Error state management
@@ -76,17 +76,16 @@ data class YourGPTConfiguration(
 ) : Parcelable
 ```
 
-### 3. ChatbotActivity
+### 3. ChatbotBottomSheetDialog
 
-**Location**: `src/main/kotlin/com/yourgpt/sdk/ChatbotActivity.kt`
+**Location**: `src/main/kotlin/com/yourgpt/sdk/ChatbotBottomSheetDialog.kt`
 
-**Purpose**: Activity wrapper with enhanced lifecycle management
+**Purpose**: BottomSheetDialogFragment with WebView integration
 
 **Component Architecture**:
 ```
-AppCompatActivity
-├── Lifecycle-aware coroutines (lifecycleScope)
-├── StateFlow observation
+BottomSheetDialogFragment
+├── Lifecycle-aware coroutines
 ├── Dynamic UI state management
 ├── WebView integration
 └── Event listener pattern
@@ -271,7 +270,7 @@ with(webView.settings) {
 ```kotlin
 companion object {
     fun createIntent(context: Context, configuration: YourGPTConfiguration): Intent {
-        return Intent(context, ChatbotActivity::class.java).apply {
+        return Intent(context, ChatbotBottomSheetDialog::class.java).apply {
             putExtra(EXTRA_CONFIGURATION, configuration)
         }
     }

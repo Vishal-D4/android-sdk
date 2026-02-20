@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-45:12
-INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-45:12
-INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-45:12
-INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-45:12
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-38:12
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-38:12
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-38:12
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-38:12
 MERGED from [androidx.databinding:viewbinding:8.1.4] /Users/d4-f2/.gradle/caches/transforms-3/b733fe09b0b66e317e5b2508af234d2a/transformed/viewbinding-8.1.4/AndroidManifest.xml:2:1-7:12
 MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-46:12
 MERGED from [androidx.navigation:navigation-common:2.7.5] /Users/d4-f2/.gradle/caches/transforms-3/81aeda49919a063c88cc217c3715ef30/transformed/navigation-common-2.7.5/AndroidManifest.xml:17:1-22:12
@@ -164,8 +164,8 @@ MERGED from [com.google.firebase:firebase-messaging:23.3.1] /Users/d4-f2/.gradle
 	android:name
 		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:6:22-74
 application
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:8:5-43:19
-INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:8:5-43:19
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:8:5-36:19
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:8:5-36:19
 MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:5-44:19
 MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:5-44:19
 MERGED from [com.google.android.material:material:1.10.0] /Users/d4-f2/.gradle/caches/transforms-3/d7d8776bdcb5aca8471796f724dea127/transformed/material-1.10.0/AndroidManifest.xml:22:5-20
@@ -272,30 +272,20 @@ ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifes
 		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:26:13-69
 	android:name
 		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:24:13-47
-activity#com.yourgpt.sdk.ChatbotActivity
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:29:9-33:50
-	android:hardwareAccelerated
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:33:13-47
+service#com.yourgpt.sdk.YourGPTNotificationService
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:29:9-35:19
+MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:9-25:19
+MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:9-25:19
 	android:exported
 		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:31:13-37
-	android:theme
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:32:13-69
 	android:name
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:30:13-59
-service#com.yourgpt.sdk.YourGPTNotificationService
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:36:9-42:19
-MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:9-25:19
-MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:9-25:19
-	android:exported
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:38:13-37
-	android:name
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:37:13-70
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:30:13-70
 intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:39:13-41:29
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:32:13-34:29
 action#com.google.firebase.MESSAGING_EVENT
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:40:17-78
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:33:17-78
 	android:name
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:40:25-75
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:33:25-75
 uses-sdk
 INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml

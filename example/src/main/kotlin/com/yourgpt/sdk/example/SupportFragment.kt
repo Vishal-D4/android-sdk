@@ -30,7 +30,7 @@ class SupportFragment : Fragment() {
     
     private fun openChatSupport() {
         val configuration = YourGPTConfig(
-            widgetUid = "69dd8b5d-d4bf-444c-a40f-732d15248ae9",
+            widgetUid = "cad24e4c-6ad9-41ef-b535-3731b48dfa71",
         )
         
         // Open the chatbot bottom sheet

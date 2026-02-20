@@ -1,20 +1,9 @@
 package com.yourgpt.sdk
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.media.RingtoneManager
-import android.os.Build
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 class YourGPTNotificationService : FirebaseMessagingService() {
     
@@ -22,7 +11,6 @@ class YourGPTNotificationService : FirebaseMessagingService() {
         const val CHANNEL_ID = "yourgpt_messages"
         const val CHANNEL_NAME = "YourGPT Messages"
         const val CHANNEL_DESCRIPTION = "Notifications for new messages from YourGPT widget"
-        const val NOTIFICATION_GROUP = "com.yourgpt.sdk.MESSAGES"
         private const val TAG = "YourGPTNotificationService"
         
         // Notification extras
@@ -53,61 +41,71 @@ class YourGPTNotificationService : FirebaseMessagingService() {
     
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        
+
         // Log token for debugging
-        android.util.Log.d(TAG, "New FCM token: $token")
-        
-        // Store token locally
+        android.util.Log.d(TAG, "New FCM token received")
+
+        // Store token locally in SharedPreferences
         storeToken(token)
-        
+
         // Notify SDK about new token
         tokenCallback?.invoke(token)
-        
-        // Send token to YourGPT backend
-        CoroutineScope(Dispatchers.IO).launch {
-            // If using NotificationClient, let it handle token registration
-            if (YourGPTNotificationClient.isInitialized()) {
-                YourGPTNotificationClient.sendTokenToYourGPT(token)
-            } else {
-                sendTokenToBackend(token)
-            }
+
+        // Cache token in NotificationClient — it will be sent to the
+        // backend securely via the WebView JS bridge next time the widget opens.
+        if (YourGPTNotificationClient.isInitialized()) {
+            YourGPTNotificationClient.cacheToken(token)
         }
     }
     
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
-        
-        android.util.Log.d(TAG, "Message received from: ${remoteMessage.from}")
-        android.util.Log.d(TAG, "Message data: ${remoteMessage.data}")
-        android.util.Log.d(TAG, "Message notification: ${remoteMessage.notification}")
-        
+
+        android.util.Log.i(TAG, "========== FCM NOTIFICATION RECEIVED ==========")
+        android.util.Log.i(TAG, "From: ${remoteMessage.from}")
+        android.util.Log.i(TAG, "Message ID: ${remoteMessage.messageId}")
+        android.util.Log.i(TAG, "Data payload: ${remoteMessage.data}")
+        android.util.Log.i(TAG, "Notification payload: ${remoteMessage.notification?.let { "title='${it.title}' body='${it.body}'" } ?: "null"}")
+
         // First, try to handle with YourGPTNotificationClient (minimalist mode)
         if (YourGPTNotificationClient.isInitialized()) {
+            android.util.Log.d(TAG, "Forwarding to YourGPTNotificationClient...")
             val handled = YourGPTNotificationClient.handleNotification(this, remoteMessage)
             if (handled) {
-                android.util.Log.d(TAG, "Notification handled by YourGPTNotificationClient")
+                android.util.Log.i(TAG, "Notification handled by YourGPTNotificationClient — notification will be shown")
+                android.util.Log.i(TAG, "===============================================")
                 return
             }
+            android.util.Log.d(TAG, "YourGPTNotificationClient did not handle it — falling through to service logic")
+        } else {
+            android.util.Log.w(TAG, "YourGPTNotificationClient not initialized — handling in service directly")
         }
-        
+
         // If not handled by client, proceed with normal flow
         val data = remoteMessage.data
         val notification = remoteMessage.notification
-        
-        // Parse YourGPT specific data - check both formats
+
+        // Parse YourGPT specific data - check for widget_uid or project_uid
         val widgetUid = data["widget_uid"] ?: data["project_uid"]
-        val messageType = data["type"] ?: "message"
-        
-        // Check if this is a YourGPT widget message (both old and new formats)
-        if (widgetUid != null && (messageType == "widget_message" || messageType == "conversation")) {
+
+        android.util.Log.d(TAG, "widget_uid='$widgetUid'")
+
+        // Identify YourGPT messages by presence of widget_uid or project_uid
+        // The type field is not used for detection (backend sends description text in type)
+        if (widgetUid != null) {
+            android.util.Log.i(TAG, "Recognized as YourGPT widget message — showing rich notification")
             handleWidgetMessage(data, notification)
         } else if (notification != null) {
             // Handle standard FCM notification with notification payload
+            android.util.Log.i(TAG, "Standard FCM notification payload — showing standard notification")
             showStandardNotification(notification)
+        } else {
+            android.util.Log.w(TAG, "Notification not recognized as YourGPT and has no notification payload — IGNORED")
         }
         
         // Notify callback listeners for advanced mode
         messageCallback?.invoke(data)
+        android.util.Log.i(TAG, "===============================================")
     }
     
     private fun handleWidgetMessage(data: Map<String, String>, notification: RemoteMessage.Notification?) {
@@ -125,27 +123,17 @@ class YourGPTNotificationService : FirebaseMessagingService() {
         val widgetUid: String
         val timestamp: Long
         
-        // Check if it's the new format with project_uid
-        if (data.containsKey("project_uid") && data["type"] == "conversation") {
-            // New format
+        // Detect YourGPT backend format by presence of session_uid or project_uid
+        val isBackendFormat = data.containsKey("session_uid") || data.containsKey("project_uid")
+
+        if (isBackendFormat) {
+            // YourGPT backend format: reads title/body first, falls back to sender_name/message_content
             messageId = data["messageId"] ?: System.currentTimeMillis().toString()
-            conversationId = data["session_uid"] // Use session_uid as conversation ID
-            senderName = notification?.title ?: data["sender_name"] ?: "YourGPT Assistant"
-            messageContent = notification?.body ?: data["message_content"] ?: "New message"
-            widgetUid = data["project_uid"] ?: return
-            
-            // Try to parse nested data if available
-            val nestedData = data["data"]
-            timestamp = if (nestedData != null) {
-                try {
-                    // Parse timestamp from nested JSON if present
-                    System.currentTimeMillis()
-                } catch (e: Exception) {
-                    System.currentTimeMillis()
-                }
-            } else {
-                System.currentTimeMillis()
-            }
+            conversationId = data["session_uid"]
+            senderName = notification?.title ?: data["title"] ?: data["sender_name"] ?: "YourGPT Assistant"
+            messageContent = notification?.body ?: data["body"] ?: data["message_content"] ?: "New message"
+            widgetUid = data["widget_uid"] ?: data["project_uid"] ?: return
+            timestamp = System.currentTimeMillis()
         } else {
             // Old format fallback
             messageId = data["message_id"] ?: System.currentTimeMillis().toString()
@@ -184,20 +172,23 @@ class YourGPTNotificationService : FirebaseMessagingService() {
         if (!YourGPTNotificationHelper.areNotificationsEnabled(this)) {
             return
         }
-        
+
         // Create intent for notification click
         val clickIntent = YourGPTNotificationHelper.createWidgetDeepLink(
             context = this,
             widgetUid = widgetUid,
             conversationId = conversationId
         )
-        
+
         val pendingIntent = YourGPTNotificationHelper.createClickPendingIntent(
             context = this,
             intent = clickIntent,
             requestCode = messageId.hashCode()
         )
-        
+
+        // Group key based on session_uid so same-session notifications thread together
+        val groupKey = if (conversationId != null) "yourgpt_session_$conversationId" else "yourgpt_messages"
+
         // Build notification using Helper
         val notificationBuilder = YourGPTNotificationHelper.createRichNotification(
             context = this,
@@ -206,52 +197,47 @@ class YourGPTNotificationService : FirebaseMessagingService() {
             bigText = messageContent,
             clickIntent = pendingIntent
         ).apply {
-            setGroup(NOTIFICATION_GROUP)
+            setGroup(groupKey)
             setWhen(timestamp)
             setShowWhen(true)
-            
+
             // Apply config settings
             if (config.soundEnabled) {
                 val soundUri = config.soundUri ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
                 setSound(soundUri)
             }
-            
+
             if (config.vibrationEnabled) {
                 setVibrate(config.vibrationPattern)
             }
-            
+
             if (config.ledEnabled) {
                 setLights(config.ledColor, config.ledOnMs, config.ledOffMs)
             }
-            
+
             config.largeIcon?.let { setLargeIcon(it) }
         }
-        
+
         // Show notification using Helper
         YourGPTNotificationHelper.showNotification(
             context = this,
             notificationId = messageId.hashCode(),
             builder = notificationBuilder
         )
-        
-        // Create summary notification for grouped messages
-        if (config.groupMessages) {
-            showGroupSummaryNotification()
+
+        // Create summary notification for this session thread
+        if (conversationId != null) {
+            val summaryBuilder = YourGPTNotificationHelper.createGroupSummary(
+                context = this,
+                groupKey = groupKey,
+                summaryText = "New messages from $senderName"
+            )
+            YourGPTNotificationHelper.showNotification(
+                context = this,
+                notificationId = "summary_$conversationId".hashCode(),
+                builder = summaryBuilder
+            )
         }
-    }
-    
-    private fun showGroupSummaryNotification() {
-        val summaryBuilder = YourGPTNotificationHelper.createGroupSummary(
-            context = this,
-            groupKey = NOTIFICATION_GROUP,
-            summaryText = "You have new messages"
-        )
-        
-        YourGPTNotificationHelper.showNotification(
-            context = this,
-            notificationId = 0,
-            builder = summaryBuilder
-        )
     }
     
     private fun showStandardNotification(notification: RemoteMessage.Notification) {
@@ -267,34 +253,6 @@ class YourGPTNotificationService : FirebaseMessagingService() {
             builder = notificationBuilder
         )
     }
-    
-    private fun showCustomDataNotification(data: Map<String, String>) {
-        // Handle custom data payloads with any structure
-        val title = data["title"] ?: data["notification"]?.let { 
-            try {
-                JSONObject(it).getString("title")
-            } catch (e: Exception) { null }
-        } ?: "YourGPT Message"
-        
-        val body = data["body"] ?: data["message"] ?: data["notification"]?.let {
-            try {
-                JSONObject(it).getString("body")
-            } catch (e: Exception) { null }
-        } ?: "This is notification body"
-        
-        val notificationBuilder = YourGPTNotificationHelper.createSimpleNotification(
-            context = this,
-            title = title,
-            message = body
-        )
-        
-        YourGPTNotificationHelper.showNotification(
-            context = this,
-            notificationId = System.currentTimeMillis().toInt(),
-            builder = notificationBuilder
-        )
-    }
-    
     private fun storeToken(token: String) {
         val sharedPrefs = getSharedPreferences("yourgpt_sdk_prefs", Context.MODE_PRIVATE)
         sharedPrefs.edit().apply {
@@ -304,23 +262,4 @@ class YourGPTNotificationService : FirebaseMessagingService() {
         }
     }
     
-    private suspend fun sendTokenToBackend(token: String) {
-        try {
-            val config = YourGPTSDKCore.getInstance().currentConfig
-            if (config != null && config.enableNotifications) {
-                // This would be implemented to send the token to YourGPT backend
-                // For now, we'll just log it
-                android.util.Log.d(TAG, "Would send token to backend for widget: ${config.widgetUid}")
-                
-                // In production, this would make an API call like:
-                // YourGPTAPI.registerDeviceToken(
-                //     widgetUid = config.widgetUid,
-                //     token = token,
-                //     platform = "android"
-                // )
-            }
-        } catch (e: Exception) {
-            android.util.Log.e(TAG, "Failed to send token to backend", e)
-        }
-    }
 }

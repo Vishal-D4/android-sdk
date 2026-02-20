@@ -1,7 +1,6 @@
 package com.yourgpt.sdk
 
 import android.content.Context
-import android.content.Intent
 import androidx.fragment.app.FragmentManager
 import kotlinx.coroutines.flow.StateFlow
 
@@ -20,24 +19,17 @@ object YourGPTSDK {
         if (configuration.enableNotifications) {
             when (configuration.notificationMode) {
                 NotificationMode.MINIMALIST -> {
-                    // Initialize NotificationClient for automatic handling
+                    // Initialize NotificationClient for automatic handling.
+                    // Token is fetched and cached during initialize().
+                    // It will be sent to the backend via WebView JS bridge
+                    // when the widget is opened — no public API needed.
                     YourGPTNotificationClient.initialize(
                         context = context,
                         widgetUid = configuration.widgetUid,
                         mode = YourGPTNotificationClient.NotificationMode.MINIMALIST
                     )
-                    
-                    // Auto-register token if enabled
-                    if (configuration.autoRegisterToken) {
-                        val token = YourGPTNotificationClient.getFirebaseToken()
-                        token?.let { YourGPTNotificationClient.sendTokenToYourGPT(it) }
-                    }
                 }
                 NotificationMode.ADVANCED -> {
-                    // Initialize for advanced mode with callbacks
-                    val notificationConfig = configuration.notificationConfig ?: YourGPTNotificationConfig()
-                    initializeNotifications(context, notificationConfig)
-                    
                     // Initialize NotificationClient in advanced mode
                     YourGPTNotificationClient.initialize(
                         context = context,
@@ -65,16 +57,7 @@ object YourGPTSDK {
         )
         initialize(context, config)
     }
-    
-    private fun initializeNotifications(context: Context, notificationConfig: YourGPTNotificationConfig) {
-        // Set up notification callbacks for advanced mode
-        // The actual notification handling is done by YourGPTNotificationClient
-        // This method is kept for backward compatibility but simplified
-        
-        // Notification events are now handled through the event listener
-        // Token management is handled by YourGPTNotificationClient
-    }
-    
+
     fun setEventListener(listener: YourGPTEventListener?) {
         eventListener = listener
         ChatbotBottomSheetDialog.setEventListener(listener)
@@ -85,11 +68,7 @@ object YourGPTSDK {
         // Show the dialog but keep it hidden until loading is complete
         bottomSheet.show(fragmentManager, "ChatbotBottomSheet")
     }
-    
-    fun createChatbotBottomSheet(configuration: YourGPTConfig): ChatbotBottomSheetDialog {
-        return ChatbotBottomSheetDialog.newInstance(configuration)
-    }
-    
+
     suspend fun setUserContext(context: Map<String, Any>) {
         core.setUserContext(context)
     }

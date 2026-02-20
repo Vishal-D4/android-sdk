@@ -24,14 +24,7 @@
             android:name=".HomeScreenActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        
-        <!-- Include YourGPT SDK activities -->
-        <activity
-            android:name="com.yourgpt.sdk.ChatbotActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:hardwareAccelerated="true" />
-        
+
         <!-- Firebase Messaging Service for notifications -->
         <service
             android:name="com.yourgpt.sdk.YourGPTNotificationService"

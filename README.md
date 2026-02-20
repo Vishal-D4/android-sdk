@@ -19,6 +19,7 @@ dependencies {
 ### Development Environment Setup
 
 For local development and testing, see [DEV_SETUP.md](./DEV_SETUP.md) for detailed instructions on:
+
 - Setting up Android Studio development environment
 - Running the example app locally with Android emulators
 - Testing on physical Android devices
@@ -48,7 +49,7 @@ dependencies {
 
 ### Step 2: Update `AndroidManifest.xml`
 
-Add required permissions and register the ChatbotActivity:
+Add required permissions:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -73,13 +74,6 @@ Add required permissions and register the ChatbotActivity:
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- YourGPT SDK ChatbotActivity - Required -->
-        <activity
-            android:name="com.yourgpt.sdk.ChatbotActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:hardwareAccelerated="true" />
     </application>
 
 </manifest>
@@ -379,11 +373,3 @@ If you're using code obfuscation, add these rules to your `proguard-rules.pro`:
     @android.webkit.JavascriptInterface <methods>;
 }
 ```
-
-## Events
-
-The widget sends these events via the event listener:
-- `onMessageReceived` - New message received from chatbot
-- `onChatOpened` - Chat interface opened
-- `onChatClosed` - Chat interface closed
-- `onError` - Error occurred during operation

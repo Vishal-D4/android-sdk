@@ -2,7 +2,7 @@
 
 ## Overview
 
-We've simplified the YourGPT SDK notification system to reduce code duplication and improve developer experience. This guide will help you migrate from the old API to the new Crisp-style API.
+We've simplified the YourGPT SDK notification system to reduce code duplication and improve developer experience. This guide will help you migrate from the old API to the new simplified API.
 
 ## What Changed
 
@@ -12,9 +12,8 @@ We've simplified the YourGPT SDK notification system to reduce code duplication 
 - **Duplicate methods in YourGPTSDK** - Direct notification methods removed in favor of specialized classes
 
 ### New Components
-- **YourGPTNotificationClient** - Main entry point for notification handling (Crisp-style)
+- **YourGPTNotificationClient** - Main entry point for notification handling
 - **YourGPTNotificationHelper** - Utility methods for common notification tasks
-- **YourGPTNotificationStyle** - Pre-defined notification styles
 
 ## Migration Steps
 
@@ -120,12 +119,6 @@ val builder = YourGPTNotificationHelper.createRichNotification(
 )
 
 YourGPTNotificationHelper.showNotification(context, notificationId, builder)
-
-// Or use pre-defined styles
-val styledBuilder = StyledNotificationBuilder(YourGPTNotificationStyle.Material())
-    .setTitle(title)
-    .setContent(message)
-    .build(context, channelId)
 ```
 
 ## Quick Migration Checklist
@@ -200,8 +193,8 @@ class MainActivity : AppCompatActivity() {
 ## Need Help?
 
 If you encounter any issues during migration:
-1. Check the [CRISP_STYLE_NOTIFICATIONS.md](CRISP_STYLE_NOTIFICATIONS.md) for detailed documentation
-2. Review the example app for implementation patterns
+1. Review the example app for implementation patterns
+2. Check the [NOTIFICATION_SETUP.md](NOTIFICATION_SETUP.md) for notification setup details
 3. Report issues on GitHub
 
 ## Deprecation Timeline
