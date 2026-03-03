@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.yourgpt.sdk.example-mergeDebugResources-62:/values-w360dp-port-v13/values-w360dp-port-v13.xml",
+            "outputFile": "com.yourgpt.sdk.example-mergeDebugResources-63:/values-w360dp-port-v13/values-w360dp-port-v13.xml",
             "map": [
                 {
                     "source": "/Users/d4-f2/.gradle/caches/transforms-3/d7d8776bdcb5aca8471796f724dea127/transformed/material-1.10.0/res/values-w360dp-port-v13/values-w360dp-port-v13.xml",

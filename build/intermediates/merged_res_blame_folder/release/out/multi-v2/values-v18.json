@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.yourgpt.sdk.yourgpt-sdk-mergeReleaseResources-29:/values-v18/values-v18.xml",
+            "outputFile": "com.yourgpt.sdk.yourgpt-sdk-mergeReleaseResources-43:/values-v18/values-v18.xml",
             "map": [
                 {
-                    "source": "/Users/d4-f2/.gradle/caches/transforms-3/97e2e7b31217bf820518c04e4405c87f/transformed/appcompat-1.6.1/res/values-v18/values-v18.xml",
+                    "source": "/Users/d4-f2/.gradle/caches/transforms-3/b50c023fb3ff9665e8ad43862e7d9d05/transformed/appcompat-1.6.1/res/values-v18/values-v18.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -16,10 +16,10 @@
             ]
         },
         {
-            "outputFile": "com.yourgpt.sdk.yourgpt-sdk-merged_res-31:/values-v18/values-v18.xml",
+            "outputFile": "com.yourgpt.sdk.yourgpt-sdk-merged_res-45:/values-v18/values-v18.xml",
             "map": [
                 {
-                    "source": "/Users/d4-f2/.gradle/caches/transforms-3/97e2e7b31217bf820518c04e4405c87f/transformed/appcompat-1.6.1/res/values-v18/values-v18.xml",
+                    "source": "/Users/d4-f2/.gradle/caches/transforms-3/b50c023fb3ff9665e8ad43862e7d9d05/transformed/appcompat-1.6.1/res/values-v18/values-v18.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

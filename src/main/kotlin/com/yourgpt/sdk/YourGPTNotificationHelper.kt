@@ -7,6 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.AudioAttributes
+import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -30,16 +33,44 @@ object YourGPTNotificationHelper {
         context: Context,
         title: String,
         message: String,
-        clickIntent: PendingIntent? = null
+        clickIntent: PendingIntent? = null,
+        config: YourGPTNotificationConfig? = null
     ): NotificationCompat.Builder {
-        return NotificationCompat.Builder(context, DEFAULT_CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+        val channelId = config?.channelId ?: DEFAULT_CHANNEL_ID
+        val smallIcon = config?.smallIconRes ?: android.R.drawable.ic_dialog_info
+        val priority = config?.priority ?: NotificationCompat.PRIORITY_HIGH
+        val autoCancel = config?.autoCancel ?: true
+
+        return NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(smallIcon)
             .setContentTitle(title)
             .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
+            .setPriority(priority)
+            .setAutoCancel(autoCancel)
             .apply {
                 clickIntent?.let { setContentIntent(it) }
+                config?.largeIcon?.let { setLargeIcon(it) }
+
+                if (config != null) {
+                    // Sound (pre-O devices; on O+ sound is channel-level)
+                    if (config.soundEnabled) {
+                        val soundUri = config.soundUri
+                            ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                        setSound(soundUri)
+                    } else {
+                        setSilent(true)
+                    }
+
+                    // Vibration (pre-O devices)
+                    if (config.vibrationEnabled) {
+                        setVibrate(config.vibrationPattern)
+                    }
+
+                    // LED
+                    if (config.ledEnabled) {
+                        setLights(config.ledColor, config.ledOnMs, config.ledOffMs)
+                    }
+                }
             }
     }
     
@@ -52,9 +83,10 @@ object YourGPTNotificationHelper {
         message: String,
         bigText: String? = null,
         imageUrl: String? = null,
-        clickIntent: PendingIntent? = null
+        clickIntent: PendingIntent? = null,
+        config: YourGPTNotificationConfig? = null
     ): NotificationCompat.Builder {
-        val builder = createSimpleNotification(context, title, message, clickIntent)
+        val builder = createSimpleNotification(context, title, message, clickIntent, config)
         
         // Add expandable big text
         bigText?.let {
@@ -161,15 +193,19 @@ object YourGPTNotificationHelper {
     fun createGroupSummary(
         context: Context,
         groupKey: String,
-        summaryText: String
+        summaryText: String,
+        config: YourGPTNotificationConfig? = null
     ): NotificationCompat.Builder {
-        return NotificationCompat.Builder(context, DEFAULT_CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info)
+        val channelId = config?.channelId ?: DEFAULT_CHANNEL_ID
+        val smallIcon = config?.smallIconRes ?: android.R.drawable.ic_dialog_info
+
+        return NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(smallIcon)
             .setContentTitle("YourGPT Messages")
             .setContentText(summaryText)
             .setGroup(groupKey)
             .setGroupSummary(true)
-            .setAutoCancel(true)
+            .setAutoCancel(config?.autoCancel ?: true)
     }
     
     /**
@@ -214,13 +250,29 @@ object YourGPTNotificationHelper {
         channelId: String = DEFAULT_CHANNEL_ID,
         channelName: String = "YourGPT Messages",
         channelDescription: String = "Notifications from YourGPT widget",
-        importance: Int = NotificationManager.IMPORTANCE_HIGH
+        importance: Int = NotificationManager.IMPORTANCE_HIGH,
+        soundUri: Uri? = null,
+        vibrationEnabled: Boolean = true,
+        vibrationPattern: LongArray? = null
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelId, channelName, importance).apply {
                 description = channelDescription
+
+                if (soundUri != null) {
+                    val audioAttributes = AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                        .build()
+                    setSound(soundUri, audioAttributes)
+                }
+
+                enableVibration(vibrationEnabled)
+                if (vibrationEnabled && vibrationPattern != null) {
+                    this.vibrationPattern = vibrationPattern
+                }
             }
-            
+
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }

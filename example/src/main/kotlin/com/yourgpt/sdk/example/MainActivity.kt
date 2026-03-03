@@ -3,13 +3,16 @@ package com.yourgpt.sdk.example
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.yourgpt.sdk.YourGPTNotificationClient
+import com.yourgpt.sdk.YourGPTNotificationConfig
 
 /**
  * MainActivity demonstrating the simplest integration of YourGPT SDK
@@ -19,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         /** Replace with your actual YourGPT widget UID */
-        const val WIDGET_UID = "cad24e4c-6ad9-41ef-c8821-3731b48dad321"
+        const val WIDGET_UID = "your-widget-uid"
     }
 
     // Notification permission launcher for Android 13+
@@ -34,21 +37,28 @@ class MainActivity : AppCompatActivity() {
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         
-        // ===== SIMPLE 3-LINE INTEGRATION =====
-        // This is all you need for basic notification support!
-        
-        // 1. Quick setup with YourGPT widget (Minimalist mode - handles everything automatically)
+        // ===== SIMPLE INTEGRATION WITH CUSTOM ICON & SOUND =====
+
+        // 1. Build notification config with custom icon and sound
+        val notifConfig = YourGPTNotificationConfig.builder()
+            .setSmallIcon(R.drawable.ic_notification)
+            .setSoundUri(Uri.parse("android.resource://${packageName}/raw/notification_sound"))
+            .build()
+
+        // 2. Quick setup with YourGPT widget (Minimalist mode - handles everything automatically)
         YourGPTNotificationClient.quickSetup(
             context = this,
-            widgetUid = WIDGET_UID
+            widgetUid = WIDGET_UID,
+            config = notifConfig
         )
         
-        // 2. Request notification permission for Android 13+
+        // 3. Request notification permission for Android 13+
         requestNotificationPermission()
-        
-        // ===== END OF SIMPLE INTEGRATION =====
+
+        // ===== END OF INTEGRATION =====
 
         // Forward the intent to HomeScreenActivity (preserves notification extras)
         val homeIntent = Intent(this, HomeScreenActivity::class.java)

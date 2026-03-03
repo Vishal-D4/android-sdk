@@ -38,7 +38,10 @@ drawable ic_ethereum
 drawable ic_exchange
 drawable ic_home
 drawable ic_launcher
+drawable ic_launcher_background
+drawable ic_launcher_foreground
 drawable ic_more
+drawable ic_notification
 drawable ic_orders
 drawable ic_sell
 drawable ic_support
@@ -83,6 +86,7 @@ layout fragment_home
 layout fragment_orders
 layout fragment_support
 menu bottom_navigation_menu
+raw notification_sound
 string app_name
 string gcm_defaultSenderId
 string google_api_key
@@ -90,3 +94,6 @@ string google_app_id
 string google_crash_reporting_api_key
 string google_storage_bucket
 string project_id
+style Theme.YourGPTExample
+style Theme.YourGPTExample.NoActionBar
+style Theme.YourGPTExample.Splash

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.yourgpt.sdk.example-mergeDebugResources-62:/values-th/values-th.xml",
+            "outputFile": "com.yourgpt.sdk.example-mergeDebugResources-63:/values-th/values-th.xml",
             "map": [
                 {
                     "source": "/Users/d4-f2/.gradle/caches/transforms-3/f4a37970fd830be7fecdf7c2d87042c7/transformed/navigation-ui-2.7.5/res/values-th/values-th.xml",

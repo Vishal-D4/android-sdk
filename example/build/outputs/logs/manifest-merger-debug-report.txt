@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-38:12
-INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-38:12
-INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-38:12
-INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-38:12
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-39:12
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-39:12
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-39:12
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:2:1-39:12
 MERGED from [androidx.databinding:viewbinding:8.1.4] /Users/d4-f2/.gradle/caches/transforms-3/b733fe09b0b66e317e5b2508af234d2a/transformed/viewbinding-8.1.4/AndroidManifest.xml:2:1-7:12
 MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-46:12
 MERGED from [androidx.navigation:navigation-common:2.7.5] /Users/d4-f2/.gradle/caches/transforms-3/81aeda49919a063c88cc217c3715ef30/transformed/navigation-common-2.7.5/AndroidManifest.xml:17:1-22:12
@@ -80,6 +80,7 @@ MERGED from [androidx.customview:customview:1.1.0] /Users/d4-f2/.gradle/caches/t
 MERGED from [androidx.transition:transition:1.4.1] /Users/d4-f2/.gradle/caches/transforms-3/09a45f5bc489f46c3c4a4e67086cc170/transformed/transition-1.4.1/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.core:core:1.12.0] /Users/d4-f2/.gradle/caches/transforms-3/c57b00bd7dfaaef5647394c5d298fb2c/transformed/core-1.12.0/AndroidManifest.xml:17:1-30:12
 MERGED from [androidx.core:core-ktx:1.12.0] /Users/d4-f2/.gradle/caches/transforms-3/8f5b5661990ddefb35d0b1bde96806e5/transformed/core-ktx-1.12.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.core:core-splashscreen:1.0.1] /Users/d4-f2/.gradle/caches/transforms-3/2ff9a92a62ed4006f8fc4eb81eea0ee3/transformed/core-splashscreen-1.0.1/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.room:room-runtime:2.5.0] /Users/d4-f2/.gradle/caches/transforms-3/284ef9b7656ba8c072ae2314f7dc17ac/transformed/room-runtime-2.5.0/AndroidManifest.xml:17:1-31:12
 MERGED from [androidx.annotation:annotation-experimental:1.3.0] /Users/d4-f2/.gradle/caches/transforms-3/f3057e1d1bdba055761144b0f744fbca/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /Users/d4-f2/.gradle/caches/transforms-3/ee39c34dd0546cbc53dd335ad30bc39c/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
@@ -164,8 +165,8 @@ MERGED from [com.google.firebase:firebase-messaging:23.3.1] /Users/d4-f2/.gradle
 	android:name
 		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:6:22-74
 application
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:8:5-36:19
-INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:8:5-36:19
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:8:5-37:19
+INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:8:5-37:19
 MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:5-44:19
 MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:5-44:19
 MERGED from [com.google.android.material:material:1.10.0] /Users/d4-f2/.gradle/caches/transforms-3/d7d8776bdcb5aca8471796f724dea127/transformed/material-1.10.0/AndroidManifest.xml:22:5-20
@@ -247,45 +248,47 @@ MERGED from [com.google.android.datatransport:transport-runtime:3.1.8] /Users/d4
 	android:allowBackup
 		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:9:9-35
 	android:theme
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:12:9-67
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:12:9-52
 activity#com.yourgpt.sdk.example.MainActivity
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:14:9-21:20
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:14:9-22:20
 	android:exported
 		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:16:13-36
+	android:theme
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:17:13-63
 	android:name
 		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:15:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:17:13-20:29
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:18:13-21:29
 action#android.intent.action.MAIN
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:18:17-69
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:19:17-69
 	android:name
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:18:25-66
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:19:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:19:17-77
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:20:17-77
 	android:name
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:19:27-74
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:20:27-74
 activity#com.yourgpt.sdk.example.HomeScreenActivity
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:23:9-26:72
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:24:9-27:71
 	android:exported
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:25:13-37
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:26:13-37
 	android:theme
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:26:13-69
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:27:13-68
 	android:name
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:24:13-47
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:25:13-47
 service#com.yourgpt.sdk.YourGPTNotificationService
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:29:9-35:19
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:30:9-36:19
 MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:9-25:19
 MERGED from [:yourgpt-sdk] /Users/d4-f2/Desktop/YGPT/android-sdk/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:9-25:19
 	android:exported
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:31:13-37
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:32:13-37
 	android:name
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:30:13-70
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:31:13-70
 intent-filter#action:name:com.google.firebase.MESSAGING_EVENT
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:32:13-34:29
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:33:13-35:29
 action#com.google.firebase.MESSAGING_EVENT
-ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:33:17-78
+ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:34:17-78
 	android:name
-		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:33:25-75
+		ADDED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml:34:25-75
 uses-sdk
 INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/d4-f2/Desktop/YGPT/android-sdk/example/src/main/AndroidManifest.xml
@@ -442,6 +445,8 @@ MERGED from [androidx.core:core:1.12.0] /Users/d4-f2/.gradle/caches/transforms-3
 MERGED from [androidx.core:core:1.12.0] /Users/d4-f2/.gradle/caches/transforms-3/c57b00bd7dfaaef5647394c5d298fb2c/transformed/core-1.12.0/AndroidManifest.xml:20:5-44
 MERGED from [androidx.core:core-ktx:1.12.0] /Users/d4-f2/.gradle/caches/transforms-3/8f5b5661990ddefb35d0b1bde96806e5/transformed/core-ktx-1.12.0/AndroidManifest.xml:5:5-44
 MERGED from [androidx.core:core-ktx:1.12.0] /Users/d4-f2/.gradle/caches/transforms-3/8f5b5661990ddefb35d0b1bde96806e5/transformed/core-ktx-1.12.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-splashscreen:1.0.1] /Users/d4-f2/.gradle/caches/transforms-3/2ff9a92a62ed4006f8fc4eb81eea0ee3/transformed/core-splashscreen-1.0.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core-splashscreen:1.0.1] /Users/d4-f2/.gradle/caches/transforms-3/2ff9a92a62ed4006f8fc4eb81eea0ee3/transformed/core-splashscreen-1.0.1/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.room:room-runtime:2.5.0] /Users/d4-f2/.gradle/caches/transforms-3/284ef9b7656ba8c072ae2314f7dc17ac/transformed/room-runtime-2.5.0/AndroidManifest.xml:21:5-44
 MERGED from [androidx.room:room-runtime:2.5.0] /Users/d4-f2/.gradle/caches/transforms-3/284ef9b7656ba8c072ae2314f7dc17ac/transformed/room-runtime-2.5.0/AndroidManifest.xml:21:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.3.0] /Users/d4-f2/.gradle/caches/transforms-3/f3057e1d1bdba055761144b0f744fbca/transformed/annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44

@@ -83,7 +83,15 @@ class HomeScreenActivity : AppCompatActivity() {
         if (intent.action == "com.yourgpt.sdk.OPEN_WIDGET") {
             viewPager.setCurrentItem(3, true)
             bottomNavigationView.selectedItemId = R.id.navigation_support
-            viewPager.postDelayed({ YourGPTSDK.show(this) }, 300)
+
+            val sessionUid = intent.getStringExtra("conversation_id")
+            viewPager.postDelayed({
+                if (sessionUid != null) {
+                    YourGPTSDK.openSession(this, sessionUid)
+                } else {
+                    YourGPTSDK.show(this)
+                }
+            }, 300)
         }
     }
 

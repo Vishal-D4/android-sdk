@@ -27,6 +27,6 @@
       applicationId="com.yourgpt.sdk.example"
       generatedSourceFolders="build/generated/ap_generated_sources/release/out:build/generated/data_binding_base_class_source_out/release/out"
       generatedResourceFolders="build/generated/res/resValues/release"
-      desugaredMethodsFiles="/Users/d4-f2/.gradle/caches/transforms-3/12b112e1be3ce79e42be7ded5141fda5/transformed/D8BackportedDesugaredMethods.txt">
+      desugaredMethodsFiles="/Users/d4-f2/.gradle/caches/transforms-3/702af2018a3e6674a7e4f1b168092344/transformed/D8BackportedDesugaredMethods.txt">
   </mainArtifact>
 </variant>

@@ -26,6 +26,16 @@ object YourGPTNotificationClient {
     private var cachedFcmToken: String? = null
     private var isTokenRegisteredViaWebView = false
     private var appContext: Context? = null
+    private var notificationConfig: YourGPTNotificationConfig? = null
+    private var eventListener: YourGPTEventListener? = null
+
+    /**
+     * Set the event listener for notification events
+     */
+    @JvmStatic
+    fun setEventListener(listener: YourGPTEventListener?) {
+        eventListener = listener
+    }
     
     /**
      * Initialize notification client with minimal configuration
@@ -36,15 +46,18 @@ object YourGPTNotificationClient {
      * @param mode Notification handling mode (default: MINIMALIST)
      */
     @JvmStatic
+    @JvmOverloads
     fun initialize(
         context: Context,
         widgetUid: String,
-        mode: NotificationMode = NotificationMode.MINIMALIST
+        mode: NotificationMode = NotificationMode.MINIMALIST,
+        config: YourGPTNotificationConfig? = null
     ) {
         this.widgetUid = widgetUid
         this.notificationMode = mode
         this.isInitialized = true
         this.appContext = context.applicationContext
+        this.notificationConfig = config
 
         // Persist widgetUid so the service can self-initialize when the app is killed
         val prefs = context.getSharedPreferences("yourgpt_sdk_prefs", Context.MODE_PRIVATE)
@@ -129,6 +142,9 @@ object YourGPTNotificationClient {
             return false
         }
 
+        // Notify listener about incoming push message (fires for both MINIMALIST and ADVANCED modes)
+        eventListener?.onPushMessageReceived(remoteMessage.data.toMap())
+
         when (notificationMode) {
             NotificationMode.MINIMALIST -> {
                 Log.i(TAG, "handleNotification: MINIMALIST mode — showing notification automatically")
@@ -165,6 +181,9 @@ object YourGPTNotificationClient {
             ?.apply()
 
         Log.d(TAG, "FCM token cached, will register via WebView when widget opens")
+
+        // Notify listener about new FCM token
+        eventListener?.onFCMTokenReceived(token)
     }
 
     /**
@@ -288,7 +307,17 @@ object YourGPTNotificationClient {
         val widgetUid = intent.getStringExtra("widget_uid")
         
         if (action == "com.yourgpt.sdk.OPEN_WIDGET" && widgetUid == this.widgetUid) {
-            openWidget(activity)
+            // Collect intent extras as a map for the listener
+            val extras = mutableMapOf<String, String>()
+            intent.extras?.let { bundle ->
+                for (key in bundle.keySet()) {
+                    bundle.getString(key)?.let { extras[key] = it }
+                }
+            }
+            eventListener?.onNotificationClicked(extras)
+
+            val conversationId = intent.getStringExtra("conversation_id")
+            openWidget(activity, conversationId)
             return true
         }
         
@@ -296,22 +325,33 @@ object YourGPTNotificationClient {
     }
     
     /**
-     * Open YourGPT widget
-     * 
+     * Open YourGPT widget, optionally navigating to a specific session.
+     *
      * @param activity FragmentActivity to show widget in
+     * @param sessionUid Optional session UID to open directly (e.g. from a notification)
      */
     @JvmStatic
-    fun openWidget(activity: FragmentActivity) {
+    @JvmOverloads
+    fun openWidget(activity: FragmentActivity, sessionUid: String? = null) {
         if (!isInitialized || widgetUid == null) {
             Log.w(TAG, "Cannot open widget - not initialized")
             return
         }
-        
+
+        eventListener?.onWidgetOpenRequested(widgetUid!!)
+
+        val customParams = if (sessionUid != null) {
+            mapOf("session_uid" to sessionUid)
+        } else {
+            emptyMap()
+        }
+
         val config = YourGPTConfig(
             widgetUid = widgetUid!!,
-            enableNotifications = true
+            enableNotifications = true,
+            customParams = customParams
         )
-        
+
         YourGPTSDK.openChatbotBottomSheet(activity.supportFragmentManager, config)
     }
     
@@ -345,11 +385,43 @@ object YourGPTNotificationClient {
     fun isInitialized(): Boolean {
         return isInitialized
     }
+
+    /**
+     * Get the current notification config
+     */
+    @JvmStatic
+    fun getNotificationConfig(): YourGPTNotificationConfig? = notificationConfig
     
+    /**
+     * Call this from your Activity's permission result callback to notify the listener.
+     *
+     * Example:
+     * ```
+     * val launcher = registerForActivityResult(RequestPermission()) { granted ->
+     *     YourGPTNotificationClient.onPermissionResult(granted)
+     * }
+     * ```
+     *
+     * @param granted true if POST_NOTIFICATIONS permission was granted
+     */
+    @JvmStatic
+    fun onPermissionResult(granted: Boolean) {
+        if (granted) {
+            eventListener?.onNotificationPermissionGranted()
+        } else {
+            eventListener?.onNotificationPermissionDenied()
+        }
+    }
+
     private fun showNotificationAndHandleClick(context: Context, remoteMessage: RemoteMessage) {
+        val cfg = notificationConfig ?: YourGPTNotificationConfig()
+
+        // Respect quiet hours and enabled flag
+        if (!cfg.shouldShowNotification()) return
+
         val data = remoteMessage.data
         val notification = remoteMessage.notification
-        
+
         // Extract notification data based on format
         val messageContent: String
         val senderName: String
@@ -390,14 +462,18 @@ object YourGPTNotificationClient {
         )
         
         // Group key based on session_uid so same-session notifications thread together
-        val groupKey = if (conversationId != null) "yourgpt_session_$conversationId" else "yourgpt_messages"
+        val groupKey = if (conversationId != null) "yourgpt_session_$conversationId" else cfg.groupKey
+
+        // Process message content per config (preview truncation)
+        val processedMessage = cfg.getProcessedMessageContent(messageContent)
 
         // Create and show notification using Helper
         val notificationBuilder = YourGPTNotificationHelper.createSimpleNotification(
             context = context,
             title = senderName,
-            message = messageContent,
-            clickIntent = pendingIntent
+            message = processedMessage,
+            clickIntent = pendingIntent,
+            config = cfg
         ).apply {
             setGroup(groupKey)
         }
@@ -414,7 +490,8 @@ object YourGPTNotificationClient {
             val summaryBuilder = YourGPTNotificationHelper.createGroupSummary(
                 context = context,
                 groupKey = groupKey,
-                summaryText = "New messages from $senderName"
+                summaryText = "New messages from $senderName",
+                config = cfg
             )
             YourGPTNotificationHelper.showNotification(
                 context = context,
@@ -423,7 +500,7 @@ object YourGPTNotificationClient {
             )
         }
 
-        Log.i(TAG, "Notification displayed — title='$senderName'  body='$messageContent'  group='$groupKey'  id=${messageId.hashCode()}")
+        Log.i(TAG, "Notification displayed — title='$senderName'  body='$processedMessage'  group='$groupKey'  id=${messageId.hashCode()}")
     }
     
     /**
@@ -434,11 +511,25 @@ object YourGPTNotificationClient {
      * YourGPTNotificationClient.quickSetup(this, "your-widget-uid")
      */
     @JvmStatic
-    fun quickSetup(context: Context, widgetUid: String) {
-        initialize(context, widgetUid, NotificationMode.MINIMALIST)
-        
+    @JvmOverloads
+    fun quickSetup(context: Context, widgetUid: String, config: YourGPTNotificationConfig? = null) {
+        initialize(context, widgetUid, NotificationMode.MINIMALIST, config)
+
         // Create notification channel for Android 8.0+
-        YourGPTNotificationHelper.createNotificationChannel(context)
+        val cfg = config
+        if (cfg != null) {
+            YourGPTNotificationHelper.createNotificationChannel(
+                context = context,
+                channelId = cfg.channelId,
+                channelName = cfg.channelName,
+                channelDescription = cfg.channelDescription,
+                soundUri = if (cfg.soundEnabled) cfg.soundUri else null,
+                vibrationEnabled = cfg.vibrationEnabled,
+                vibrationPattern = cfg.vibrationPattern
+            )
+        } else {
+            YourGPTNotificationHelper.createNotificationChannel(context)
+        }
         
         // Request notification permission for Android 13+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

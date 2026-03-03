@@ -21,7 +21,8 @@ object YourGPTSDK {
             YourGPTNotificationClient.initialize(
                 context = context,
                 widgetUid = configuration.widgetUid,
-                mode = configuration.notificationMode
+                mode = configuration.notificationMode,
+                config = configuration.notificationConfig
             )
         }
     }
@@ -43,11 +44,31 @@ object YourGPTSDK {
     fun setEventListener(listener: YourGPTEventListener?) {
         eventListener = listener
         ChatbotBottomSheetDialog.setEventListener(listener)
+        YourGPTNotificationClient.setEventListener(listener)
     }
     
     fun openChatbotBottomSheet(fragmentManager: FragmentManager, configuration: YourGPTConfig) {
         val bottomSheet = ChatbotBottomSheetDialog.newInstance(configuration)
         bottomSheet.show(fragmentManager, "ChatbotBottomSheet")
+    }
+
+    /**
+     * Create a standalone ChatbotBottomSheetDialog Fragment for custom embedding.
+     * Mirrors iOS's createChatbotViewController().
+     *
+     * @param widgetUid The widget UID to use
+     * @param customParams Optional custom parameters
+     * @return A ChatbotBottomSheetDialog instance ready for presentation
+     */
+    fun createChatbotFragment(
+        widgetUid: String,
+        customParams: Map<String, String> = emptyMap()
+    ): ChatbotBottomSheetDialog {
+        val config = YourGPTConfig(
+            widgetUid = widgetUid,
+            customParams = customParams
+        )
+        return ChatbotBottomSheetDialog.newInstance(config)
     }
 
     /**
@@ -58,8 +79,24 @@ object YourGPTSDK {
      */
     fun show(activity: FragmentActivity) {
         val config = core.currentConfig
-            ?: throw IllegalStateException("SDK not initialized. Call initialize() first.")
+            ?: throw YourGPTError.NotInitialized()
         openChatbotBottomSheet(activity.supportFragmentManager, config)
+    }
+
+    /**
+     * Open the chatbot widget and navigate directly to a specific session/conversation.
+     * Useful for deep-linking from notifications in ADVANCED mode, or for
+     * programmatic navigation to a known conversation.
+     *
+     * @param activity The FragmentActivity to show the widget in
+     * @param sessionUid The session/conversation UID to open
+     */
+    fun openSession(activity: FragmentActivity, sessionUid: String) {
+        val baseConfig = core.currentConfig
+            ?: throw YourGPTError.NotInitialized()
+
+        val configWithSession = baseConfig.withParams(mapOf("session_uid" to sessionUid))
+        openChatbotBottomSheet(activity.supportFragmentManager, configWithSession)
     }
 
     suspend fun setUserContext(context: Map<String, Any>) {
@@ -87,6 +124,14 @@ object YourGPTSDK {
         core.off(event, callback)
     }
     
+    /**
+     * Notify event listeners that a push was received without showing a notification.
+     * Mirrors iOS's YourGPTNotificationClient.notifyPushReceived().
+     */
+    fun notifyPushReceived(data: Map<String, Any>) {
+        eventListener?.onPushMessageReceived(data)
+    }
+
     fun destroy() {
         core.destroy()
     }

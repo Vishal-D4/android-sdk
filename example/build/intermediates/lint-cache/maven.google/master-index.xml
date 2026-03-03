@@ -39,6 +39,7 @@
   <androidx.compose.material/>
   <androidx.compose.material3/>
   <androidx.compose.material3.adaptive/>
+  <androidx.compose.remote/>
   <androidx.compose.runtime/>
   <androidx.compose.ui/>
   <androidx.concurrent/>
@@ -66,6 +67,7 @@
   <androidx.games/>
   <androidx.gaming/>
   <androidx.glance/>
+  <androidx.glance.wear/>
   <androidx.gradle/>
   <androidx.graphics/>
   <androidx.gridlayout/>
@@ -225,6 +227,7 @@
   <com.android.tools.pixelprobe/>
   <com.android.tools.screenshot/>
   <com.android.tools.smali/>
+  <com.android.tools.studio.leakcanary/>
   <com.android.tools.utp/>
   <com.android.volley/>
   <com.crashlytics.sdk.android/>

@@ -1,7 +1,6 @@
 package com.yourgpt.sdk
 
 import android.content.Context
-import android.media.RingtoneManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -35,8 +34,21 @@ class YourGPTNotificationService : FirebaseMessagingService() {
     
     override fun onCreate() {
         super.onCreate()
-        // Use Helper to create notification channel
-        YourGPTNotificationHelper.createNotificationChannel(this)
+        // Use Helper to create notification channel with config if available
+        val cfg = YourGPTNotificationClient.getNotificationConfig()
+        if (cfg != null) {
+            YourGPTNotificationHelper.createNotificationChannel(
+                context = this,
+                channelId = cfg.channelId,
+                channelName = cfg.channelName,
+                channelDescription = cfg.channelDescription,
+                soundUri = if (cfg.soundEnabled) cfg.soundUri else null,
+                vibrationEnabled = cfg.vibrationEnabled,
+                vibrationPattern = cfg.vibrationPattern
+            )
+        } else {
+            YourGPTNotificationHelper.createNotificationChannel(this)
+        }
     }
     
     override fun onNewToken(token: String) {
@@ -144,8 +156,8 @@ class YourGPTNotificationService : FirebaseMessagingService() {
             timestamp = data["timestamp"]?.toLongOrNull() ?: System.currentTimeMillis()
         }
         
-        // Get default config for notifications
-        val config = YourGPTNotificationConfig()
+        // Get user config or fall back to defaults
+        val config = YourGPTNotificationClient.getNotificationConfig() ?: YourGPTNotificationConfig()
         
         // Create notification
         showNotification(
@@ -189,33 +201,18 @@ class YourGPTNotificationService : FirebaseMessagingService() {
         // Group key based on session_uid so same-session notifications thread together
         val groupKey = if (conversationId != null) "yourgpt_session_$conversationId" else "yourgpt_messages"
 
-        // Build notification using Helper
+        // Build notification using Helper (config is applied inside createRichNotification)
         val notificationBuilder = YourGPTNotificationHelper.createRichNotification(
             context = this,
             title = senderName,
             message = messageContent,
             bigText = messageContent,
-            clickIntent = pendingIntent
+            clickIntent = pendingIntent,
+            config = config
         ).apply {
             setGroup(groupKey)
             setWhen(timestamp)
             setShowWhen(true)
-
-            // Apply config settings
-            if (config.soundEnabled) {
-                val soundUri = config.soundUri ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-                setSound(soundUri)
-            }
-
-            if (config.vibrationEnabled) {
-                setVibrate(config.vibrationPattern)
-            }
-
-            if (config.ledEnabled) {
-                setLights(config.ledColor, config.ledOnMs, config.ledOffMs)
-            }
-
-            config.largeIcon?.let { setLargeIcon(it) }
         }
 
         // Show notification using Helper
@@ -230,7 +227,8 @@ class YourGPTNotificationService : FirebaseMessagingService() {
             val summaryBuilder = YourGPTNotificationHelper.createGroupSummary(
                 context = this,
                 groupKey = groupKey,
-                summaryText = "New messages from $senderName"
+                summaryText = "New messages from $senderName",
+                config = config
             )
             YourGPTNotificationHelper.showNotification(
                 context = this,
@@ -241,10 +239,12 @@ class YourGPTNotificationService : FirebaseMessagingService() {
     }
     
     private fun showStandardNotification(notification: RemoteMessage.Notification) {
+        val config = YourGPTNotificationClient.getNotificationConfig()
         val notificationBuilder = YourGPTNotificationHelper.createSimpleNotification(
             context = this,
             title = notification.title ?: "YourGPT",
-            message = notification.body ?: "You have a new message"
+            message = notification.body ?: "You have a new message",
+            config = config
         )
         
         YourGPTNotificationHelper.showNotification(

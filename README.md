@@ -1,6 +1,6 @@
 # YourGPT Android SDK
 
-A Kotlin SDK for integrating YourGPT chatbot widget as a full-screen view in Android applications.
+A Kotlin SDK for integrating YourGPT chatbot widget into Android applications.
 
 ## Quick Start
 
@@ -12,69 +12,22 @@ Add the dependency to your app's `build.gradle` file:
 dependencies {
     implementation 'com.yourgpt:android-sdk:1.0.0'
     implementation 'androidx.webkit:webkit:1.8.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0' // For coroutines support
-}
-```
-
-## Integration Guide
-
-Follow these steps to integrate YourGPT SDK into your Android application:
-
-### Step 1: Update `build.gradle` (App Module)
-
-Add required dependencies to your app's `build.gradle` file:
-
-```gradle
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.20"
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
-    implementation 'androidx.webkit:webkit:1.8.0'
-
-    // YourGPT SDK
-    implementation 'com.yourgpt:android-sdk:1.0.0'
 }
 ```
 
-### Step 2: Update `AndroidManifest.xml`
+### Step 1: Update `AndroidManifest.xml`
 
 Add required permissions:
 
 ```xml
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!-- Required permissions -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <application
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-
-        <!-- Your main activity -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
-
-</manifest>
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
 
-### Step 3: Initialize and Open the Chat Widget
+### Step 2: Initialize and Open the Chat Widget
 
 ```kotlin
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.yourgpt.sdk.*
 import kotlinx.coroutines.launch
 
@@ -84,14 +37,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // 1. Initialize SDK
-        val config = YourGPTConfig(widgetUid = "your-widget-uid-here")
-
+        // Initialize SDK
         lifecycleScope.launch {
-            YourGPTSDK.initialize(this@MainActivity, config)
+            YourGPTSDK.initialize(this@MainActivity, YourGPTConfig(widgetUid = "your-widget-uid"))
         }
 
-        // 2. Open chat on button click
+        // Open chat on button click
         findViewById<View>(R.id.btn_open_chat).setOnClickListener {
             YourGPTSDK.show(this)
         }
@@ -101,103 +52,245 @@ class MainActivity : AppCompatActivity() {
 
 That's it. The SDK handles the WebView, loading states, and lifecycle internally.
 
-## Configuration Options
+### Quick Initialize (One-Liner)
 
-### YourGPTConfig
+For the simplest setup with notifications auto-enabled:
 
 ```kotlin
-val configuration = YourGPTConfig(
-    widgetUid = "your-widget-uid",    // Required: Your YourGPT widget UID
+lifecycleScope.launch {
+    YourGPTSDK.quickInitialize(this@MainActivity, "your-widget-uid")
+}
+```
+
+---
+
+## Configuration
+
+```kotlin
+val config = YourGPTConfig(
+    widgetUid = "your-widget-uid",    // Required
     debug = true                      // Optional: Enable debug logs (default: false)
 )
 ```
 
-## SDK Methods
+### Push Notifications
 
-### Initialize SDK
+Enable push notifications with optional custom icon and sound:
 
 ```kotlin
+val notifConfig = YourGPTNotificationConfig.builder()
+    .setSmallIcon(R.drawable.ic_notification)
+    .setSoundUri(Uri.parse("android.resource://${packageName}/raw/notification_sound"))
+    .build()
+
+val config = YourGPTConfig(
+    widgetUid = "your-widget-uid",
+    enableNotifications = true,
+    notificationConfig = notifConfig
+)
+
 lifecycleScope.launch {
-    try {
-        YourGPTSDK.initialize(this@MainActivity, configuration)
-    } catch (error: Exception) {
-        // Handle initialization error
-    }
+    YourGPTSDK.initialize(this@MainActivity, config)
 }
 ```
 
-### Open Chatbot
+See [NOTIFICATION_SETUP.md](NOTIFICATION_SETUP.md) for complete setup instructions.
+
+---
+
+## Opening the Chatbot
+
+### Simple (uses config from `initialize()`)
 
 ```kotlin
-// Simplest — uses config from initialize()
 YourGPTSDK.show(this)
+```
 
-// Or with explicit config and FragmentManager
+### With explicit config
+
+```kotlin
 val config = YourGPTConfig(widgetUid = "your-widget-uid")
 YourGPTSDK.openChatbotBottomSheet(supportFragmentManager, config)
 ```
 
-### Set Event Listener
+### Open a specific conversation
 
 ```kotlin
-YourGPTSDK.setEventListener(this) // 'this' implements YourGPTEventListener
+YourGPTSDK.openSession(this, sessionUid = "conversation-uid")
 ```
 
-### Observe SDK State
+### Create a standalone Fragment
+
+Use `createChatbotFragment()` when you want to embed the chatbot in your own container instead of a bottom sheet:
+
+```kotlin
+val fragment = YourGPTSDK.createChatbotFragment(
+    widgetUid = "your-widget-uid",
+    customParams = mapOf("lang" to "en")
+)
+
+// Use with your own FragmentTransaction
+supportFragmentManager.beginTransaction()
+    .replace(R.id.container, fragment)
+    .commit()
+```
+
+---
+
+## Widget Data Methods
+
+After the chatbot is opened, you can send data to the widget:
+
+```kotlin
+val fragment = YourGPTSDK.createChatbotFragment(widgetUid = "your-widget-uid")
+
+// Send session-specific data
+fragment.setSessionData(mapOf("orderId" to "12345", "plan" to "premium"))
+
+// Send visitor data (auto-enriched with device info: platform, model, OS version, app version)
+fragment.setVisitorData(mapOf("userId" to "user_abc", "name" to "John"))
+
+// Send contact information
+fragment.setContactData(mapOf("email" to "john@example.com", "phone" to "+1234567890"))
+
+// Programmatically open the chat interface
+fragment.openChat()
+```
+
+---
+
+## Event Handling
+
+### Global Event Listener
+
+Implement `YourGPTEventListener` to receive SDK-wide events:
+
+```kotlin
+class MainActivity : AppCompatActivity(), YourGPTEventListener {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        YourGPTSDK.setEventListener(this)
+    }
+
+    // Required — widget events
+    override fun onMessageReceived(message: Map<String, Any>) { }
+    override fun onChatOpened() { }
+    override fun onChatClosed() { }
+    override fun onError(error: String) { }
+    override fun onLoadingStarted() { }
+    override fun onLoadingFinished() { }
+
+    // Optional — notification events (default no-op)
+    override fun onFCMTokenReceived(token: String) { }
+    override fun onPushMessageReceived(data: Map<String, Any>) { }
+    override fun onNotificationClicked(extras: Map<String, String>) { }
+    override fun onWidgetOpenRequested(widgetUid: String) { }
+    override fun onNotificationPermissionGranted() { }
+    override fun onNotificationPermissionDenied() { }
+}
+```
+
+### Per-Dialog Listener
+
+Use `ChatbotDialogListener` for per-instance event handling:
+
+```kotlin
+val fragment = YourGPTSDK.createChatbotFragment(widgetUid = "your-widget-uid")
+fragment.dialogListener = object : ChatbotDialogListener {
+    override fun chatbotDidReceiveMessage(message: Map<String, Any>) { }
+    override fun chatbotDidOpen() { }
+    override fun chatbotDidClose() { }
+    override fun chatbotDidFailWithError(error: String) { }
+    override fun chatbotDidStartLoading() { }
+    override fun chatbotDidFinishLoading() { }
+}
+```
+
+---
+
+## Custom Loading & Error Views
+
+Inject custom views for the loading and error states:
+
+```kotlin
+val fragment = YourGPTSDK.createChatbotFragment(widgetUid = "your-widget-uid")
+
+// Custom loading view
+fragment.customLoadingViewProvider = { context ->
+    LayoutInflater.from(context).inflate(R.layout.my_loading_view, null)
+}
+
+// Custom error view (receives the error message)
+fragment.customErrorViewProvider = { context, errorMessage ->
+    LayoutInflater.from(context).inflate(R.layout.my_error_view, null).apply {
+        findViewById<TextView>(R.id.error_text).text = errorMessage
+    }
+}
+
+fragment.show(supportFragmentManager, "ChatbotBottomSheet")
+```
+
+The default error view includes a "Try Again" button that retries the connection automatically.
+
+---
+
+## SDK State
+
+### Observe State Changes
 
 ```kotlin
 lifecycleScope.launch {
     YourGPTSDK.stateFlow.collect { state ->
         when (state.connectionState) {
-            YourGPTConnectionState.CONNECTED -> {
-                // SDK is ready
-            }
-            YourGPTConnectionState.CONNECTING -> {
-                // SDK is connecting
-            }
-            YourGPTConnectionState.ERROR -> {
-                // Handle error: state.error
-            }
-            YourGPTConnectionState.DISCONNECTED -> {
-                // SDK is disconnected
-            }
+            YourGPTConnectionState.CONNECTED -> { /* Ready */ }
+            YourGPTConnectionState.CONNECTING -> { /* Loading */ }
+            YourGPTConnectionState.ERROR -> { /* Error: state.error */ }
+            YourGPTConnectionState.DISCONNECTED -> { /* Disconnected */ }
         }
     }
 }
 ```
 
-## Event Listener Interface
-
-Implement `YourGPTEventListener` to receive SDK events:
+### Check Readiness
 
 ```kotlin
-interface YourGPTEventListener {
-    // Required — widget events
-    fun onMessageReceived(message: Map<String, Any>)
-    fun onChatOpened()
-    fun onChatClosed()
-    fun onError(error: String)
-    fun onLoadingStarted()
-    fun onLoadingFinished()
-
-    // Optional — notification events (default no-op implementations provided)
-    fun onFCMTokenReceived(token: String) {}
-    fun onPushMessageReceived(data: Map<String, Any>) {}
-    fun onNotificationClicked(extras: Map<String, String>) {}
-    fun onWidgetOpenRequested(widgetUid: String) {}
-    fun onNotificationPermissionGranted() {}
-    fun onNotificationPermissionDenied() {}
+if (YourGPTSDK.isReady) {
+    // SDK is connected and ready
 }
 ```
 
-## SDK States
+---
 
-The SDK provides real-time state updates through `YourGPTSDKState`:
+## Error Handling
 
-- **CONNECTED**: SDK is connected and ready to use
-- **CONNECTING**: SDK is initializing/connecting
-- **DISCONNECTED**: SDK is disconnected
-- **ERROR**: An error occurred (check `state.error` for details)
+The SDK uses structured error types via the `YourGPTError` sealed class:
+
+```kotlin
+lifecycleScope.launch {
+    try {
+        YourGPTSDK.initialize(this@MainActivity, config)
+    } catch (e: YourGPTError.InvalidConfiguration) {
+        // Invalid or missing configuration
+    } catch (e: YourGPTError.NotInitialized) {
+        // SDK not initialized — call initialize() first
+    } catch (e: YourGPTError.NotReady) {
+        // SDK not ready (still loading or in error state)
+    } catch (e: YourGPTError) {
+        // Other SDK errors (InvalidURL, WebViewError)
+    }
+}
+```
+
+| Error Type | Description |
+|------------|-------------|
+| `YourGPTError.InvalidConfiguration` | Configuration is invalid or missing required fields |
+| `YourGPTError.NotInitialized` | SDK has not been initialized |
+| `YourGPTError.NotReady` | SDK is not ready (still loading or in error state) |
+| `YourGPTError.InvalidURL` | Failed to build a valid widget URL |
+| `YourGPTError.WebViewError` | An error occurred in the WebView |
+
+---
 
 ## Requirements
 
