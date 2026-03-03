@@ -1,3 +1,0 @@
-com.yourgpt.sdk.example.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme

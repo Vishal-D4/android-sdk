@@ -1,0 +1,70 @@
+# Built application files
+*.apk
+*.aar
+*.ap_
+
+# Dalvik/ART VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+build/
+gen/
+out/
+
+# Gradle files
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# Local configuration (machine-specific SDK paths)
+local.properties
+
+# IntelliJ IDEA / Android Studio
+*.iml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/asLocalRingProjectSystem.xml
+.idea/AndroidProjectSystem.xml
+.idea/dictionaries
+.idea/libraries
+.idea/caches
+.idea/modules.xml
+.idea/runConfigurations
+.idea/studiobot.xml
+.idea/migrations.xml
+.idea/misc.xml
+
+# Compiled resources
+*.flat
+*.ap_
+
+# Keystore files (keep out of version control)
+*.jks
+*.keystore
+
+# External native build
+.externalNativeBuild/
+.cxx/
+
+# Android Studio captures
+captures/
+
+# Lint
+lint/intermediates/
+lint/outputs/
+lint/tmp/
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Navigation editor temp files
+.navigation/
+
+# Log files
+*.log
