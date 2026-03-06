@@ -59,6 +59,9 @@ lint/intermediates/
 lint/outputs/
 lint/tmp/
 
+# Firebase config (contains project-specific keys)
+google-services.json
+
 # macOS
 .DS_Store
 **/.DS_Store
