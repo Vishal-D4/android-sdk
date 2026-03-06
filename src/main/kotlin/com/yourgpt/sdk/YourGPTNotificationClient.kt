@@ -1,11 +1,15 @@
 package com.yourgpt.sdk
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import android.webkit.WebView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +24,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 object YourGPTNotificationClient {
     
     private const val TAG = "YourGPTNotificationClient"
+    private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
     private var widgetUid: String? = null
     private var notificationMode: NotificationMode = NotificationMode.MINIMALIST
     private var isInitialized = false
@@ -73,6 +78,11 @@ object YourGPTNotificationClient {
         }
 
         Log.d(TAG, "Initialized with widget: $widgetUid, mode: $mode")
+
+        // Request notification permission on Android 13+ (minimalist mode)
+        if (mode == NotificationMode.MINIMALIST) {
+            requestNotificationPermissionIfNeeded(context)
+        }
 
         // Auto-fetch and cache token if in minimalist mode
         if (mode == NotificationMode.MINIMALIST) {
@@ -531,11 +541,26 @@ object YourGPTNotificationClient {
             YourGPTNotificationHelper.createNotificationChannel(context)
         }
         
-        // Request notification permission for Android 13+
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (context is Activity) {
-                // The activity should handle permission request
-                Log.d(TAG, "Remember to request POST_NOTIFICATIONS permission for Android 13+")
+        // Permission is already requested in initialize() for minimalist mode
+    }
+
+    /**
+     * Request POST_NOTIFICATIONS permission on Android 13+ if not already granted.
+     * Only works when the context is an Activity.
+     */
+    private fun requestNotificationPermissionIfNeeded(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && context is Activity) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.d(TAG, "Requesting POST_NOTIFICATIONS permission")
+                ActivityCompat.requestPermissions(
+                    context,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    NOTIFICATION_PERMISSION_REQUEST_CODE
+                )
+            } else {
+                Log.d(TAG, "POST_NOTIFICATIONS permission already granted")
             }
         }
     }
